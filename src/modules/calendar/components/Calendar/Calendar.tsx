@@ -32,6 +32,20 @@ import {
 } from './Calendar.styled';
 
 const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'];
+const monthsInNominativeCase = [
+  'Січень',
+  'Лютий',
+  'Березень',
+  'Квітень',
+  'Травень',
+  'Червень',
+  'Липень',
+  'Серпень',
+  'Вересень',
+  'Жовтень',
+  'Листопад',
+  'Грудень',
+];
 
 const generateCalendarGrid = (year: number, month: number) => {
   const start = startOfWeek(startOfMonth(new Date(year, month)), {
@@ -68,6 +82,7 @@ export const Calendar: FC = () => {
   const year = getYear(selectedDate);
   const month = getMonth(selectedDate);
   const grid = generateCalendarGrid(year, month);
+  const monthName = monthsInNominativeCase[getMonth(selectedDate)];
 
   const previousMonth = () =>
     setSelectedDate(current => addMonths(current, -1));
@@ -81,9 +96,7 @@ export const Calendar: FC = () => {
       <TitleStyled>Календар</TitleStyled>
       <ControlPanelWrapperStyled>
         <TextWrapperStyled>
-          <NameMonthStyled>
-            {format(selectedDate, ' MMMM', { locale: uk })}
-          </NameMonthStyled>
+          <NameMonthStyled>{monthName}</NameMonthStyled>
           <p>{format(selectedDate, 'yyyy', { locale: uk })}</p>
         </TextWrapperStyled>
         <WraperButtonStyled>
