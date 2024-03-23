@@ -14,6 +14,7 @@ import {
 } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import {
+  ButtonFormWrapperStyled,
   ButtonStyled,
   CalendarWrapperStyled,
   CellWrapperStyled,
@@ -22,6 +23,7 @@ import {
   DayWeekWrapperStyled,
   DayWrapperStyled,
   GridWrapperStyled,
+  InputFormStyled,
   NameMonthStyled,
   RowInCellStyled,
   TaskItemStyled,
@@ -34,6 +36,7 @@ import {
   WraperButtonStyled,
 } from './Calendar.styled';
 import { Task, getAllTasks } from '../../../../services/api/tasksApi';
+import Modal from '../../../../shared/components/Modal/Modal';
 
 const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'];
 const monthsInNominativeCase = [
@@ -83,6 +86,7 @@ const generateCalendarGrid = (year: number, month: number) => {
 export const Calendar: FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const year = getYear(selectedDate);
   const month = getMonth(selectedDate);
@@ -107,63 +111,88 @@ export const Calendar: FC = () => {
     })();
   }, [year, month]);
 
+  const handleDoubleClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <CalendarWrapperStyled>
-      <TitleStyled>Календар</TitleStyled>
-      <ControlPanelWrapperStyled>
-        <TextWrapperStyled>
-          <NameMonthStyled>{monthName}</NameMonthStyled>
-          <p>{format(selectedDate, 'yyyy', { locale: uk })}</p>
-        </TextWrapperStyled>
-        <WraperButtonStyled>
-          <ButtonStyled onClick={previousYear}>«</ButtonStyled>
-          <ButtonStyled onClick={previousMonth}>‹</ButtonStyled>
-          <TodayButtonStyled onClick={resetToToday}>
-            {format(new Date(), 'EEEE, d MMMM', { locale: uk })}
-          </TodayButtonStyled>
-          <ButtonStyled onClick={nextMonth}>›</ButtonStyled>
-          <ButtonStyled onClick={nextYear}>»</ButtonStyled>
-        </WraperButtonStyled>
-      </ControlPanelWrapperStyled>
-      <DayWeekWrapperStyled>
-        {daysOfWeek.map(day => (
-          <DayWeeSellStyled key={day}>{day}</DayWeeSellStyled>
-        ))}
-      </DayWeekWrapperStyled>
-      <GridWrapperStyled>
-        {grid.map(week => (
-          <WeekWrapperStyled key={format(week[0], 'yyyy-MM-dd')}>
-            {week.map(day => (
-              <CellWrapperStyled
-                key={format(day, 'yyyy-MM-dd')}
-                $isWeekend={day.getDay() === 6 || day.getDay() === 0}
-                $isCurrentMonth={getMonth(day) === month}
-              >
-                <RowInCellStyled>
-                  <DayWrapperStyled
-                    $isToday={day.toDateString() === new Date().toDateString()}
-                  >
-                    {format(day, 'd')}
-                  </DayWrapperStyled>
-                </RowInCellStyled>
-                <TasksListStyled>
-                  {tasks
-                    .filter(
-                      task =>
-                        format(new Date(task.date), 'yyyy-MM-dd') ===
-                        format(day, 'yyyy-MM-dd')
-                    )
-                    .map(task => (
-                      <TaskItemStyled key={task._id}>
-                        <TaskTextStyled>{task.name} </TaskTextStyled>
-                      </TaskItemStyled>
-                    ))}
-                </TasksListStyled>
-              </CellWrapperStyled>
-            ))}
-          </WeekWrapperStyled>
-        ))}
-      </GridWrapperStyled>
-    </CalendarWrapperStyled>
+    <>
+      <CalendarWrapperStyled>
+        <TitleStyled>Календар</TitleStyled>
+        <ControlPanelWrapperStyled>
+          <TextWrapperStyled>
+            <NameMonthStyled>{monthName}</NameMonthStyled>
+            <p>{format(selectedDate, 'yyyy', { locale: uk })}</p>
+          </TextWrapperStyled>
+          <WraperButtonStyled>
+            <ButtonStyled onClick={previousYear}>«</ButtonStyled>
+            <ButtonStyled onClick={previousMonth}>‹</ButtonStyled>
+            <TodayButtonStyled onClick={resetToToday}>
+              {format(new Date(), 'EEEE, d MMMM', { locale: uk })}
+            </TodayButtonStyled>
+            <ButtonStyled onClick={nextMonth}>›</ButtonStyled>
+            <ButtonStyled onClick={nextYear}>»</ButtonStyled>
+          </WraperButtonStyled>
+        </ControlPanelWrapperStyled>
+        <DayWeekWrapperStyled>
+          {daysOfWeek.map(day => (
+            <DayWeeSellStyled key={day}>{day}</DayWeeSellStyled>
+          ))}
+        </DayWeekWrapperStyled>
+        <GridWrapperStyled>
+          {grid.map(week => (
+            <WeekWrapperStyled key={format(week[0], 'yyyy-MM-dd')}>
+              {week.map(day => (
+                <CellWrapperStyled
+                  key={format(day, 'yyyy-MM-dd')}
+                  $isWeekend={day.getDay() === 6 || day.getDay() === 0}
+                  $isCurrentMonth={getMonth(day) === month}
+                >
+                  <RowInCellStyled>
+                    <DayWrapperStyled
+                      onDoubleClick={handleDoubleClick}
+                      $isToday={
+                        day.toDateString() === new Date().toDateString()
+                      }
+                    >
+                      {format(day, 'd')}
+                    </DayWrapperStyled>
+                  </RowInCellStyled>
+                  <TasksListStyled>
+                    {tasks
+                      .filter(
+                        task =>
+                          format(new Date(task.date), 'yyyy-MM-dd') ===
+                          format(day, 'yyyy-MM-dd')
+                      )
+                      .map(task => (
+                        <TaskItemStyled key={task._id}>
+                          <TaskTextStyled onDoubleClick={handleDoubleClick}>
+                            {task.name}{' '}
+                          </TaskTextStyled>
+                        </TaskItemStyled>
+                      ))}
+                  </TasksListStyled>
+                </CellWrapperStyled>
+              ))}
+            </WeekWrapperStyled>
+          ))}
+        </GridWrapperStyled>
+      </CalendarWrapperStyled>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <form>
+          <InputFormStyled type="text" />
+          <InputFormStyled type="text" />
+          <ButtonFormWrapperStyled>
+            <button>Cancel</button>
+            <button>+</button>
+          </ButtonFormWrapperStyled>
+        </form>
+      </Modal>
+    </>
   );
 };

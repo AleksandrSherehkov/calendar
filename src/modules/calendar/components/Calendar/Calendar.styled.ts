@@ -124,22 +124,23 @@ export const DayWrapperStyled = styled.span<DayWrapperStyledProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${({ $isToday }) => ($isToday ? '#f00' : 'none')};
+  background-color: ${({ $isToday }) => ($isToday ? '#f00' : 'none')};
   border-radius: 50%;
   border: none;
+  cursor: pointer;
 `;
 
 export const TasksListStyled = styled.ul`
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
 `;
 
 export const TaskItemStyled = styled.li`
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
 
   width: 100%;
@@ -152,4 +153,22 @@ export const TaskTextStyled = styled.p`
   width: 100%;
   color: #dddddd;
   cursor: pointer;
+`;
+
+export const InputFormStyled = styled.input`
+  padding-top: 4px 14px;
+  font-size: 0.85rem;
+  width: 100%;
+  border: unset;
+  background-color: #1e1f21;
+  color: #dddddd;
+  outline: unset;
+  border-bottom: 1px solid #464648;
+`;
+
+export const ButtonFormWrapperStyled = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 8px 14px;
 `;
