@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import {
   format,
   getMonth,
@@ -24,12 +24,16 @@ import {
   GridWrapperStyled,
   NameMonthStyled,
   RowInCellStyled,
+  TaskItemStyled,
+  TaskTextStyled,
+  TasksListStyled,
   TextWrapperStyled,
   TitleStyled,
   TodayButtonStyled,
   WeekWrapperStyled,
   WraperButtonStyled,
 } from './Calendar.styled';
+import { Task, getAllTasks } from '../../../../services/api/tasksApi';
 
 const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'];
 const monthsInNominativeCase = [
@@ -78,6 +82,7 @@ const generateCalendarGrid = (year: number, month: number) => {
 
 export const Calendar: FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   const year = getYear(selectedDate);
   const month = getMonth(selectedDate);
@@ -90,6 +95,17 @@ export const Calendar: FC = () => {
   const previousYear = () => setSelectedDate(current => addYears(current, -1));
   const nextYear = () => setSelectedDate(current => addYears(current, 1));
   const resetToToday = () => setSelectedDate(new Date());
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await getAllTasks({ month: month + 1, year });
+        setTasks(response);
+      } catch (error) {
+        console.error('Failed to fetch tasks', error);
+      }
+    })();
+  }, [year, month]);
 
   return (
     <CalendarWrapperStyled>
@@ -130,6 +146,19 @@ export const Calendar: FC = () => {
                     {format(day, 'd')}
                   </DayWrapperStyled>
                 </RowInCellStyled>
+                <TasksListStyled>
+                  {tasks
+                    .filter(
+                      task =>
+                        format(new Date(task.date), 'yyyy-MM-dd') ===
+                        format(day, 'yyyy-MM-dd')
+                    )
+                    .map(task => (
+                      <TaskItemStyled key={task._id}>
+                        <TaskTextStyled>{task.name} </TaskTextStyled>
+                      </TaskItemStyled>
+                    ))}
+                </TasksListStyled>
               </CellWrapperStyled>
             ))}
           </WeekWrapperStyled>

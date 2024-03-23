@@ -128,3 +128,28 @@ export const DayWrapperStyled = styled.span<DayWrapperStyledProps>`
   border-radius: 50%;
   border: none;
 `;
+
+export const TasksListStyled = styled.ul`
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+`;
+
+export const TaskItemStyled = styled.li`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+
+  width: 100%;
+`;
+
+export const TaskTextStyled = styled.p`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  color: #dddddd;
+  cursor: pointer;
+`;

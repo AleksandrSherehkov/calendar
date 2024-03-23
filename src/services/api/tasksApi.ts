@@ -11,9 +11,11 @@ const instance = axios.create({
   baseURL: 'http://localhost:3000/api/tasks',
 });
 
-export const addTask = async (task: Omit<Task, '_id'>): Promise<Task> => {
+export const getAllTasks = async (
+  params?: GetAllQueryParams
+): Promise<Task[]> => {
   try {
-    const { data } = await instance.post<Task>('/', task);
+    const { data } = await instance.get<Task[]>('/', { params });
     return data;
   } catch (error) {
     const typedError = error as AxiosError<ErrorResponse>;
@@ -23,11 +25,9 @@ export const addTask = async (task: Omit<Task, '_id'>): Promise<Task> => {
   }
 };
 
-export const getAllTasks = async (
-  params?: GetAllQueryParams
-): Promise<Task[]> => {
+export const addTask = async (task: Omit<Task, '_id'>): Promise<Task> => {
   try {
-    const { data } = await instance.get<Task[]>('/', { params });
+    const { data } = await instance.post<Task>('/', task);
     return data;
   } catch (error) {
     const typedError = error as AxiosError<ErrorResponse>;
