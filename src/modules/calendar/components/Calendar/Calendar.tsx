@@ -35,8 +35,9 @@ import {
   WeekWrapperStyled,
   WraperButtonStyled,
 } from './Calendar.styled';
-import { Task, getAllTasks } from '../../../../services/api/tasksApi';
+import { getAllTasks } from '../../../../services/api/tasksApi';
 import Modal from '../../../../shared/components/Modal/Modal';
+import { Task } from '../../../../shared/types/definitions';
 
 const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'];
 const monthsInNominativeCase = [
@@ -83,9 +84,17 @@ const generateCalendarGrid = (year: number, month: number) => {
   return grid;
 };
 
+const initialTaskState: Task = {
+  name: '',
+  description: '',
+  date: new Date().toISOString(),
+};
+
 export const Calendar: FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [currentTask, setCurrentTask] = useState<Task>(initialTaskState);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const year = getYear(selectedDate);
@@ -111,11 +120,26 @@ export const Calendar: FC = () => {
     })();
   }, [year, month]);
 
-  const handleDoubleClick = () => {
+  const handleAddTaskDoubleClick = () => {
     setIsModalOpen(true);
   };
 
+  const handleTaskDoubleClick = (task: Task) => {
+    setCurrentTask(task);
+    setIsModalOpen(true);
+  };
+
+  const handleInputChange = (field: keyof Task, value: string) => {
+    setCurrentTask(prevTask => ({
+      ...prevTask,
+      [field]: value,
+
+      date: prevTask?.date || new Date().toISOString(),
+    }));
+  };
+
   const handleCloseModal = () => {
+    setCurrentTask(initialTaskState);
     setIsModalOpen(false);
   };
 
@@ -154,7 +178,7 @@ export const Calendar: FC = () => {
                 >
                   <RowInCellStyled>
                     <DayWrapperStyled
-                      onDoubleClick={handleDoubleClick}
+                      onDoubleClick={handleAddTaskDoubleClick}
                       $isToday={
                         day.toDateString() === new Date().toDateString()
                       }
@@ -171,7 +195,9 @@ export const Calendar: FC = () => {
                       )
                       .map(task => (
                         <TaskItemStyled key={task._id}>
-                          <TaskTextStyled onDoubleClick={handleDoubleClick}>
+                          <TaskTextStyled
+                            onDoubleClick={() => handleTaskDoubleClick(task)}
+                          >
                             {task.name}{' '}
                           </TaskTextStyled>
                         </TaskItemStyled>
@@ -185,8 +211,19 @@ export const Calendar: FC = () => {
       </CalendarWrapperStyled>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <form>
-          <InputFormStyled type="text" />
-          <InputFormStyled type="text" />
+          <InputFormStyled
+            type="text"
+            name="taskName"
+            value={currentTask.name}
+            onChange={e => handleInputChange('name', e.target.value)}
+          />
+          <InputFormStyled
+            type="text"
+            name="taskDiscription"
+            value={currentTask.description}
+            onChange={e => handleInputChange('description', e.target.value)}
+          />
+
           <ButtonFormWrapperStyled>
             <button>Cancel</button>
             <button>+</button>

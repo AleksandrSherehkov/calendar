@@ -94,5 +94,3 @@ export const deleteTaskById = async (
     throw typedError;
   }
 };
-
-export type { Task, GetAllQueryParams };
