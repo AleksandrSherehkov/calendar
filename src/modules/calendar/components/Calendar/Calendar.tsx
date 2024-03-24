@@ -35,7 +35,12 @@ import {
   WeekWrapperStyled,
   WraperButtonStyled,
 } from './Calendar.styled';
-import { getAllTasks } from '../../../../services/api/tasksApi';
+import {
+  addTask,
+  getAllTasks,
+  getTaskById,
+  updateTaskById,
+} from '../../../../services/api/tasksApi';
 import Modal from '../../../../shared/components/Modal/Modal';
 import { Task } from '../../../../shared/types/definitions';
 
@@ -94,7 +99,7 @@ export const Calendar: FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasks, setTasks] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task>(initialTaskState);
-
+  const [isEditing, setIsEditing] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const year = getYear(selectedDate);
@@ -118,28 +123,74 @@ export const Calendar: FC = () => {
         console.error('Failed to fetch tasks', error);
       }
     })();
-  }, [year, month]);
+  }, [year, month, currentTask]);
 
-  const handleAddTaskDoubleClick = () => {
+  const handleAddNewTaskDoubleClick = (date: Date) => {
+    setCurrentTask({ ...initialTaskState, date: date.toISOString() });
+    setIsEditing(false);
     setIsModalOpen(true);
   };
 
-  const handleTaskDoubleClick = (task: Task) => {
-    setCurrentTask(task);
-    setIsModalOpen(true);
+  const addNewTask = async (task: Omit<Task, '_id'>) => {
+    try {
+      const addedTask = await addTask(task);
+      setIsEditing(true);
+      setCurrentTask(addedTask);
+    } catch (error) {
+      console.error('Failed to add new task', error);
+    }
+  };
+
+  const handleTaskDoubleClick = async (task: Task) => {
+    try {
+      if (task._id) {
+        const fetchedTask = await getTaskById(task._id);
+        setCurrentTask(fetchedTask);
+        setIsModalOpen(true);
+      } else {
+        throw new Error('Task ID is undefined');
+      }
+    } catch (error) {
+      console.error('Failed to fetch task details', error);
+    }
   };
 
   const handleInputChange = (field: keyof Task, value: string) => {
     setCurrentTask(prevTask => ({
       ...prevTask,
       [field]: value,
-
-      date: prevTask?.date || new Date().toISOString(),
     }));
+  };
+
+  const handleFormSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      if (isEditing && currentTask._id) {
+        const updatedTask = await updateTaskById(currentTask._id, {
+          name: currentTask.name,
+          description: currentTask.description,
+          date: currentTask.date,
+        });
+        setCurrentTask(updatedTask);
+
+        setIsModalOpen(false);
+        setCurrentTask(initialTaskState);
+      } else {
+        await addNewTask({
+          name: currentTask.name,
+          description: currentTask.description,
+          date: currentTask.date,
+        });
+        setIsModalOpen(false);
+      }
+    } catch (error) {
+      console.error('Failed to update task', error);
+    }
   };
 
   const handleCloseModal = () => {
     setCurrentTask(initialTaskState);
+    setIsEditing(true);
     setIsModalOpen(false);
   };
 
@@ -178,7 +229,7 @@ export const Calendar: FC = () => {
                 >
                   <RowInCellStyled>
                     <DayWrapperStyled
-                      onDoubleClick={handleAddTaskDoubleClick}
+                      onDoubleClick={() => handleAddNewTaskDoubleClick(day)}
                       $isToday={
                         day.toDateString() === new Date().toDateString()
                       }
@@ -210,7 +261,7 @@ export const Calendar: FC = () => {
         </GridWrapperStyled>
       </CalendarWrapperStyled>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <form>
+        <form onSubmit={handleFormSubmit}>
           <InputFormStyled
             type="text"
             name="taskName"
@@ -225,8 +276,15 @@ export const Calendar: FC = () => {
           />
 
           <ButtonFormWrapperStyled>
-            <button>Cancel</button>
-            <button>+</button>
+            <button type="button" onClick={handleCloseModal}>
+              Cancel
+            </button>
+            <button type="submit">{isEditing ? 'Edit' : 'Add'}</button>
+            {isEditing ? (
+              ''
+            ) : (
+              <button onClick={handleDeleteTask}>Delete</button>
+            )}
           </ButtonFormWrapperStyled>
         </form>
       </Modal>

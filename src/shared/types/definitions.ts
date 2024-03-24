@@ -6,7 +6,7 @@ export interface Task {
   _id?: string;
   name: string;
   description: string;
-  date: string; // ISO 8601 date format
+  date: string;
   completed?: boolean;
 }
 
