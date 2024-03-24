@@ -37,6 +37,7 @@ import {
 } from './Calendar.styled';
 import {
   addTask,
+  deleteTaskById,
   getAllTasks,
   getTaskById,
   updateTaskById,
@@ -138,6 +139,21 @@ export const Calendar: FC = () => {
       setCurrentTask(addedTask);
     } catch (error) {
       console.error('Failed to add new task', error);
+    }
+  };
+
+  const deleteTask = async (id: string | undefined) => {
+    if (id) {
+      try {
+        await deleteTaskById(id);
+        const updatedTasks = await getAllTasks({ month: month + 1, year });
+        setTasks(updatedTasks);
+        handleCloseModal();
+      } catch (error) {
+        console.error('Failed to delete task', error);
+      }
+    } else {
+      console.error('No task ID provided for deletion');
     }
   };
 
@@ -280,11 +296,11 @@ export const Calendar: FC = () => {
               Cancel
             </button>
             <button type="submit">{isEditing ? 'Edit' : 'Add'}</button>
-            {isEditing ? (
-              ''
-            ) : (
-              <button onClick={handleDeleteTask}>Delete</button>
-            )}
+            {isEditing && currentTask._id ? (
+              <button type="button" onClick={() => deleteTask(currentTask._id)}>
+                Delete
+              </button>
+            ) : null}
           </ButtonFormWrapperStyled>
         </form>
       </Modal>
