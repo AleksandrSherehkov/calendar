@@ -15,7 +15,6 @@ export const BackdropStyled = styled.div`
 
 export const ModalWrapperStyled = styled.div`
   width: ${props => props.theme.spacing(50)};
-  padding: 20px 0 6px 0;
 
   position: relative;
   border-radius: ${props => props.theme.radii.xs};

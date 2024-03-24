@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import {
-  format,
   getMonth,
   getYear,
   eachDayOfInterval,
@@ -12,29 +11,8 @@ import {
   addYears,
   addDays,
 } from 'date-fns';
-import { uk } from 'date-fns/locale';
-import {
-  ButtonFormWrapperStyled,
-  ButtonStyled,
-  CalendarWrapperStyled,
-  CellWrapperStyled,
-  ControlPanelWrapperStyled,
-  DayWeeSellStyled,
-  DayWeekWrapperStyled,
-  DayWrapperStyled,
-  GridWrapperStyled,
-  InputFormStyled,
-  NameMonthStyled,
-  RowInCellStyled,
-  TaskItemStyled,
-  TaskTextStyled,
-  TasksListStyled,
-  TextWrapperStyled,
-  TitleStyled,
-  TodayButtonStyled,
-  WeekWrapperStyled,
-  WraperButtonStyled,
-} from './Calendar.styled';
+
+import { CalendarWrapperStyled } from './Calendar.styled';
 import {
   addTask,
   deleteTaskById,
@@ -44,8 +22,12 @@ import {
 } from '../../../../services/api/tasksApi';
 import Modal from '../../../../shared/components/Modal/Modal';
 import { Task } from '../../../../shared/types/definitions';
+import { TitleCalendar } from '../TitleCalendar/TitleCalendar';
+import { ControlPanel } from '../ControlPanel/ControlPanel';
+import { DaysOfWeek } from '../DaysOfWeek/DaysOfWeek';
+import { CalendarGrid } from '../CalendarGrid/CalendarGrid';
+import { TaskForm } from '../../../taskForm/components/TaskForm/TaskForm';
 
-const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'];
 const monthsInNominativeCase = [
   'Січень',
   'Лютий',
@@ -222,101 +204,33 @@ export const Calendar: FC = () => {
   return (
     <>
       <CalendarWrapperStyled>
-        <TitleStyled>Календар</TitleStyled>
-        <ControlPanelWrapperStyled>
-          <TextWrapperStyled>
-            <NameMonthStyled>{monthName}</NameMonthStyled>
-            <p>{format(selectedDate, 'yyyy', { locale: uk })}</p>
-          </TextWrapperStyled>
-          <WraperButtonStyled>
-            <ButtonStyled onClick={previousYear}>«</ButtonStyled>
-            <ButtonStyled onClick={previousMonth}>‹</ButtonStyled>
-            <TodayButtonStyled onClick={resetToToday}>
-              {format(new Date(), 'EEEE, d MMMM', { locale: uk })}
-            </TodayButtonStyled>
-            <ButtonStyled onClick={nextMonth}>›</ButtonStyled>
-            <ButtonStyled onClick={nextYear}>»</ButtonStyled>
-          </WraperButtonStyled>
-        </ControlPanelWrapperStyled>
-        <DayWeekWrapperStyled>
-          {daysOfWeek.map(day => (
-            <DayWeeSellStyled key={day}>{day}</DayWeeSellStyled>
-          ))}
-        </DayWeekWrapperStyled>
-        <GridWrapperStyled>
-          {grid.map(week => (
-            <WeekWrapperStyled key={format(week[0], 'yyyy-MM-dd')}>
-              {week.map(day => (
-                <CellWrapperStyled
-                  key={format(day, 'yyyy-MM-dd')}
-                  $isWeekend={day.getDay() === 6 || day.getDay() === 0}
-                  $isCurrentMonth={getMonth(day) === month}
-                >
-                  <RowInCellStyled>
-                    <DayWrapperStyled
-                      onDoubleClick={() => handleAddNewTaskDoubleClick(day)}
-                      $isToday={
-                        day.toDateString() === new Date().toDateString()
-                      }
-                    >
-                      {format(day, 'd')}
-                    </DayWrapperStyled>
-                  </RowInCellStyled>
-                  <TasksListStyled>
-                    {tasks
-                      .filter(
-                        task =>
-                          format(new Date(task.date), 'yyyy-MM-dd') ===
-                          format(day, 'yyyy-MM-dd')
-                      )
-                      .map(task => (
-                        <TaskItemStyled key={task._id}>
-                          <TaskTextStyled
-                            onDoubleClick={() => handleTaskDoubleClick(task)}
-                          >
-                            {task.name}{' '}
-                          </TaskTextStyled>
-                        </TaskItemStyled>
-                      ))}
-                  </TasksListStyled>
-                </CellWrapperStyled>
-              ))}
-            </WeekWrapperStyled>
-          ))}
-        </GridWrapperStyled>
+        <TitleCalendar text="Календар" />
+        <ControlPanel
+          monthName={monthName}
+          selectedDate={selectedDate}
+          previousMonth={previousMonth}
+          nextMonth={nextMonth}
+          previousYear={previousYear}
+          nextYear={nextYear}
+          resetToToday={resetToToday}
+        />
+        <DaysOfWeek />
+        <CalendarGrid
+          grid={grid}
+          tasks={tasks}
+          handleAddNewTaskDoubleClick={handleAddNewTaskDoubleClick}
+          handleTaskDoubleClick={handleTaskDoubleClick}
+        />
       </CalendarWrapperStyled>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <form onSubmit={handleFormSubmit}>
-          <InputFormStyled
-            type="text"
-            name="taskName"
-            value={currentTask.name}
-            onChange={e => handleInputChange('name', e.target.value)}
-            placeholder="Назва"
-          />
-          <InputFormStyled
-            type="text"
-            name="taskDiscription"
-            value={currentTask.description}
-            onChange={e => handleInputChange('description', e.target.value)}
-            placeholder="Опис"
-          />
-
-          <ButtonFormWrapperStyled>
-            <button type="button" onClick={handleCloseModal}>
-              Cancel
-            </button>
-            <button type="submit">{isEditing ? 'Edit' : 'Add'}</button>
-            {isEditing && currentTask._id ? (
-              <button
-                type="button"
-                onClick={() => currentTask._id && deleteTask(currentTask._id)}
-              >
-                Delete
-              </button>
-            ) : null}
-          </ButtonFormWrapperStyled>
-        </form>
+        <TaskForm
+          currentTask={currentTask}
+          handleInputChange={handleInputChange}
+          handleFormSubmit={handleFormSubmit}
+          handleCloseModal={handleCloseModal}
+          deleteTask={deleteTask}
+          isEditing={isEditing}
+        />
       </Modal>
     </>
   );
