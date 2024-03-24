@@ -137,12 +137,30 @@ export const Calendar: FC = () => {
       const addedTask = await addTask(task);
       setIsEditing(true);
       setCurrentTask(addedTask);
+      setIsModalOpen(false);
     } catch (error) {
       console.error('Failed to add new task', error);
     }
   };
 
-  const deleteTask = async (id: string | undefined) => {
+  const handleUpdateTask = async () => {
+    if (currentTask._id) {
+      try {
+        const updatedTask = await updateTaskById(currentTask._id, {
+          name: currentTask.name,
+          description: currentTask.description,
+          date: currentTask.date,
+        });
+        setCurrentTask(updatedTask);
+        setIsModalOpen(false);
+        setCurrentTask(initialTaskState);
+      } catch (error) {
+        console.error('Failed to update task', error);
+      }
+    }
+  };
+
+  const deleteTask = async (id: string) => {
     if (id) {
       try {
         await deleteTaskById(id);
@@ -182,22 +200,13 @@ export const Calendar: FC = () => {
     event.preventDefault();
     try {
       if (isEditing && currentTask._id) {
-        const updatedTask = await updateTaskById(currentTask._id, {
-          name: currentTask.name,
-          description: currentTask.description,
-          date: currentTask.date,
-        });
-        setCurrentTask(updatedTask);
-
-        setIsModalOpen(false);
-        setCurrentTask(initialTaskState);
+        await handleUpdateTask();
       } else {
         await addNewTask({
           name: currentTask.name,
           description: currentTask.description,
           date: currentTask.date,
         });
-        setIsModalOpen(false);
       }
     } catch (error) {
       console.error('Failed to update task', error);
@@ -297,7 +306,10 @@ export const Calendar: FC = () => {
             </button>
             <button type="submit">{isEditing ? 'Edit' : 'Add'}</button>
             {isEditing && currentTask._id ? (
-              <button type="button" onClick={() => deleteTask(currentTask._id)}>
+              <button
+                type="button"
+                onClick={() => currentTask._id && deleteTask(currentTask._id)}
+              >
                 Delete
               </button>
             ) : null}
