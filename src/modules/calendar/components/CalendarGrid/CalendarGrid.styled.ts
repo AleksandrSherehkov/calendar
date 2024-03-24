@@ -25,13 +25,12 @@ export const WeekWrapperStyled = styled.ul`
 `;
 
 export const CellWrapperStyled = styled.li<CellWrapperStyledProps>`
-  min-width: ${props => props.theme.spacing(35)};
-  min-height: ${props => props.theme.spacing(20)};
+  width: ${props => props.theme.spacing(45)};
+  min-height: ${props => props.theme.spacing(27)};
 
   background-color: ${({ $isWeekend, theme }) =>
     $isWeekend ? theme.colors.hazeGray : theme.colors.black};
-  color: ${({ $isCurrentMonth, theme }) =>
-    $isCurrentMonth ? theme.colors.lightGrey : theme.colors.granite};
+  color: ${({ $isCurrentMonth }) => ($isCurrentMonth ? '#dddddd' : '#555759')};
   padding: ${props => props.theme.spacing(1)};
 `;
 
@@ -61,21 +60,38 @@ export const TasksListStyled = styled.ul`
   justify-content: flex-start;
   align-items: center;
   width: 100%;
+  gap: ${props => props.theme.spacing(1)};
 `;
 
 export const TaskItemStyled = styled.li`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  background-color: ${props => props.theme.colors.foggyGrey};
 
   width: 100%;
 `;
 
 export const TaskTextStyled = styled.p`
+  width: 100%;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  width: 100%;
-  color: #dddddd;
+  color: ${props => props.theme.colors.lightGrey};
   cursor: pointer;
+  font-size: ${props => props.theme.fontSizes.xs};
+  padding: 0 4px;
+  background-color: ${props => props.theme.colors.foggyGrey};
+  border-top: ${props => props.theme.borders.normal};
+  border-top-color: ${props => props.theme.colors.grey};
+  border-left: ${props => props.theme.borders.normal};
+  border-left-color: ${props => props.theme.colors.darkGrey};
+  border-right: ${props => props.theme.borders.normal};
+  border-right-color: ${props => props.theme.colors.darkGrey};
+  border-bottom: ${props => props.theme.borders.normal};
+  border-bottom-color: ${props => props.theme.colors.darkGrey};
+`;
+
+export const ShowMoreStyled = styled(TaskTextStyled)`
+  font-style: italic;
 `;

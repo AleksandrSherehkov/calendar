@@ -10,7 +10,7 @@ export const DayWeekWrapperStyled = styled.ul`
   border-bottom-color: ${props => props.theme.colors.darkGrey};
 `;
 export const DayWeeSellStyled = styled.li`
-  min-width: ${props => props.theme.spacing(35)};
+  min-width: ${props => props.theme.spacing(45)};
   text-align: end;
   padding-right: ${props => props.theme.spacing(1.5)};
 `;

@@ -2,10 +2,13 @@ import React, { FC } from 'react';
 
 import { Task } from '../../../../shared/types/definitions';
 import {
+  ButtonFormStyled,
   ButtonFormWrapperStyled,
   FormStyled,
   InputFormStyled,
+  TextAreaStyled,
 } from './TaskForm.styled';
+import { Title } from '../../../../shared/components/Title/Title';
 
 interface TaskFormProps {
   currentTask: Task;
@@ -27,7 +30,7 @@ export const TaskForm: FC<TaskFormProps> = ({
 }) => {
   return (
     <FormStyled onSubmit={handleFormSubmit}>
-      <h2>{isEditing ? 'Edit Task' : 'Add Task'}</h2>
+      <Title text={isEditing ? 'Edit Task' : 'Add Task'} variant="form" />
       <InputFormStyled
         type="text"
         name="taskName"
@@ -35,26 +38,28 @@ export const TaskForm: FC<TaskFormProps> = ({
         onChange={e => handleInputChange('name', e.target.value)}
         placeholder="Назва"
       />
-      <InputFormStyled
-        type="text"
+      <TextAreaStyled
         name="taskDiscription"
         value={currentTask.description}
         onChange={e => handleInputChange('description', e.target.value)}
         placeholder="Опис"
+        rows={6}
       />
 
       <ButtonFormWrapperStyled>
-        <button type="button" onClick={handleCloseModal}>
+        <ButtonFormStyled type="button" onClick={handleCloseModal}>
           Cancel
-        </button>
-        <button type="submit">{isEditing ? 'Edit' : 'Add'}</button>
+        </ButtonFormStyled>
+        <ButtonFormStyled type="submit">
+          {isEditing ? 'Edit' : 'Add'}
+        </ButtonFormStyled>
         {isEditing && currentTask._id && (
-          <button
+          <ButtonFormStyled
             type="button"
             onClick={() => currentTask._id && deleteTask(currentTask._id)}
           >
             Delete
-          </button>
+          </ButtonFormStyled>
         )}
       </ButtonFormWrapperStyled>
     </FormStyled>

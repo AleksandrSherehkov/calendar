@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { format, getMonth } from 'date-fns';
 import { Task } from '../../../../shared/types/definitions';
@@ -7,6 +7,7 @@ import {
   DayWrapperStyled,
   GridWrapperStyled,
   RowInCellStyled,
+  ShowMoreStyled,
   TaskItemStyled,
   TaskTextStyled,
   TasksListStyled,
@@ -16,6 +17,7 @@ import {
 interface CalendarGridProps {
   grid: Date[][];
   tasks: Task[];
+  month: number;
   handleAddNewTaskDoubleClick: (date: Date) => void;
   handleTaskDoubleClick: (task: Task) => void;
 }
@@ -23,6 +25,7 @@ interface CalendarGridProps {
 export const CalendarGrid: FC<CalendarGridProps> = ({
   grid,
   tasks,
+  month,
   handleAddNewTaskDoubleClick,
   handleTaskDoubleClick,
 }) => {
@@ -34,7 +37,7 @@ export const CalendarGrid: FC<CalendarGridProps> = ({
             <CellWrapperStyled
               key={format(day, 'yyyy-MM-dd')}
               $isWeekend={day.getDay() === 6 || day.getDay() === 0}
-              $isCurrentMonth={getMonth(day) === getMonth(week[0])}
+              $isCurrentMonth={getMonth(day) === month}
             >
               <RowInCellStyled>
                 <DayWrapperStyled
@@ -51,6 +54,7 @@ export const CalendarGrid: FC<CalendarGridProps> = ({
                       format(new Date(task.date), 'yyyy-MM-dd') ===
                       format(day, 'yyyy-MM-dd')
                   )
+                  .slice(0, 3)
                   .map(task => (
                     <TaskItemStyled key={task._id}>
                       <TaskTextStyled
@@ -60,6 +64,11 @@ export const CalendarGrid: FC<CalendarGridProps> = ({
                       </TaskTextStyled>
                     </TaskItemStyled>
                   ))}
+                {tasks.filter(
+                  task =>
+                    format(new Date(task.date), 'yyyy-MM-dd') ===
+                    format(day, 'yyyy-MM-dd')
+                ).length > 3 && <ShowMoreStyled>показати ще...</ShowMoreStyled>}
               </TasksListStyled>
             </CellWrapperStyled>
           ))}

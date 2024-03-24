@@ -22,11 +22,12 @@ import {
 } from '../../../../services/api/tasksApi';
 import Modal from '../../../../shared/components/Modal/Modal';
 import { Task } from '../../../../shared/types/definitions';
-import { TitleCalendar } from '../TitleCalendar/TitleCalendar';
+
 import { ControlPanel } from '../ControlPanel/ControlPanel';
 import { DaysOfWeek } from '../DaysOfWeek/DaysOfWeek';
 import { CalendarGrid } from '../CalendarGrid/CalendarGrid';
 import { TaskForm } from '../../../taskForm/components/TaskForm/TaskForm';
+import { Title } from '../../../../shared/components/Title/Title';
 
 const monthsInNominativeCase = [
   'Січень',
@@ -204,7 +205,7 @@ export const Calendar: FC = () => {
   return (
     <>
       <CalendarWrapperStyled>
-        <TitleCalendar text="Календар" />
+        <Title text="Календар" />
         <ControlPanel
           monthName={monthName}
           selectedDate={selectedDate}
@@ -220,6 +221,7 @@ export const Calendar: FC = () => {
           tasks={tasks}
           handleAddNewTaskDoubleClick={handleAddNewTaskDoubleClick}
           handleTaskDoubleClick={handleTaskDoubleClick}
+          month={month}
         />
       </CalendarWrapperStyled>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>

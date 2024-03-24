@@ -14,7 +14,7 @@ export const BackdropStyled = styled.div`
 `;
 
 export const ModalWrapperStyled = styled.div`
-  width: ${props => props.theme.spacing(50)};
+  width: ${props => props.theme.spacing(70)};
 
   position: relative;
   border-radius: ${props => props.theme.radii.xs};
@@ -34,8 +34,8 @@ export const ModalWrapperStyled = styled.div`
 
 export const CloseButtonStyled = styled.button`
   position: absolute;
-  top: ${props => props.theme.spacing(0.5)};
-  right: ${props => props.theme.spacing(0.5)};
+  top: ${props => props.theme.spacing(1)};
+  right: ${props => props.theme.spacing(1)};
   cursor: pointer;
   color: ${props => props.theme.colors.granite};
   transition: color ${props => props.theme.transitions.regular};
