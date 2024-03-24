@@ -1,16 +1,15 @@
 export const theme = {
   colors: {
-    white: '#FFFFFF',
-    black: '#111111',
-    yellow: '#FFC107',
-    lightOrange: '#FDF7F2',
-    lightPink: '#FEF9F9',
-    blueGradient: 'linear-gradient(290deg, #419EF1 0%, #9BD0FF 107.89%)',
-    blue: '#54ADFF',
-    lightBlue: '#CCE4FB',
-    green: '#00C3AD',
-    red: '#F43F5E',
-    grey: '#888888',
+    darkWhite: '#e6e6e6',
+    black: '#1e1f21',
+    granite: '#565759',
+    darkGrey: '#464648',
+    grey: '#737372',
+    foggyGrey: '#404040',
+    hazeGray: '#272829',
+    lightGrey: '#dddddd',
+    red: '#ff0000',
+    modalGrey: 'rgba(0, 0, 0, 0.35)',
   },
 
   spacing: (value: number) => `${4 * value}px`,
@@ -38,8 +37,8 @@ export const theme = {
     s: '14px',
     m: '16px',
     l: '20px',
-    xl: '24px',
-    xxl: '48px',
+    xl: '32px',
+    xxl: '36px',
   },
 
   fontWeights: {
@@ -59,15 +58,15 @@ export const theme = {
   radii: {
     none: '0',
     round: '50%',
-    xxs: '8px',
-    xs: '16px',
-    s: '20px',
-    m: '24px',
-    l: '40px',
+    xxs: '4px',
+    xs: '8px',
+    // s: '20px',
+    // m: '24px',
+    // l: '40px',
   },
 
   shadows: {
-    primary: '3px 8px 14px rgba(136, 198, 253, 0.19)',
+    primary: '0 0 0 1px #1a1a1a, 0 8px 20px 6px #888888',
     secondary: '7px 13px 14px rgba(116, 177, 232, 0.24)',
   },
 

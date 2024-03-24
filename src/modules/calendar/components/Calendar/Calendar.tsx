@@ -292,12 +292,14 @@ export const Calendar: FC = () => {
             name="taskName"
             value={currentTask.name}
             onChange={e => handleInputChange('name', e.target.value)}
+            placeholder="Назва"
           />
           <InputFormStyled
             type="text"
             name="taskDiscription"
             value={currentTask.description}
             onChange={e => handleInputChange('description', e.target.value)}
+            placeholder="Опис"
           />
 
           <ButtonFormWrapperStyled>

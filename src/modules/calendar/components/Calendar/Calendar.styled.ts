@@ -13,19 +13,23 @@ export const CalendarWrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-top: 1px solid #737374;
-  border-left: 1px solid #464648;
-  border-right: 1px solid #464648;
-  border-bottom: 1px solid #464648;
-  border-radius: 8px;
+  border-top: ${props => props.theme.borders.normal};
+  border-top-color: ${props => props.theme.colors.grey};
+  border-left: ${props => props.theme.borders.normal};
+  border-left-color: ${props => props.theme.colors.darkGrey};
+  border-right: ${props => props.theme.borders.normal};
+  border-right-color: ${props => props.theme.colors.darkGrey};
+  border-bottom: ${props => props.theme.borders.normal};
+  border-bottom-color: ${props => props.theme.colors.darkGrey};
+
+  border-radius: ${props => props.theme.radii.xs};
   overflow: hidden;
-  box-shadow: 0 0 0 1px #1a1a1a, 0 8px 20px 6px #888888;
-  background-color: #1e1f21;
+  box-shadow: ${props => props.theme.shadows.primary};
+  background-color: ${props => props.theme.colors.black};
 `;
 
 export const TitleStyled = styled.h1`
-  border-color: #2a2b20;
-  height: 36px;
+  font-size: ${props => props.theme.fontSizes.xxl};
 `;
 
 export const ControlPanelWrapperStyled = styled.div`
@@ -33,15 +37,15 @@ export const ControlPanelWrapperStyled = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 16px;
+  padding: ${props => props.theme.spacing(4)};
 `;
 
 export const TextWrapperStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 32px;
-  gap: 8px;
+  font-size: ${props => props.theme.fontSizes.xl};
+  gap: ${props => props.theme.spacing(2)};
 `;
 export const NameMonthStyled = styled.p`
   font-weight: bold;
@@ -54,19 +58,19 @@ export const WraperButtonStyled = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 4px;
+  gap: ${props => props.theme.spacing(1)};
 `;
 export const ButtonStyled = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
   border: unset;
-  border-radius: 4px;
-  background-color: #565759;
+  border-radius: ${props => props.theme.radii.xxs};
+  background-color: ${props => props.theme.colors.granite};
 
   padding: 2px 8px;
 
-  color: #e6e6e6;
+  color: ${props => props.theme.colors.darkWhite};
 `;
 
 export const TodayButtonStyled = styled(ButtonStyled)`
@@ -79,12 +83,13 @@ export const DayWeekWrapperStyled = styled.ul`
   align-items: center;
   justify-content: space-between;
 
-  border-bottom: 2px solid #464648;
+  border-bottom: ${props => props.theme.borders.medium};
+  border-bottom-color: ${props => props.theme.colors.darkGrey};
 `;
 export const DayWeeSellStyled = styled.li`
-  min-width: 140px;
+  min-width: ${props => props.theme.spacing(35)};
   text-align: end;
-  padding-right: 6px;
+  padding-right: ${props => props.theme.spacing(1.5)};
 `;
 
 export const GridWrapperStyled = styled.div`
@@ -92,23 +97,25 @@ export const GridWrapperStyled = styled.div`
   flex-direction: column;
 
   width: 100%;
-  background-color: #404040;
-  gap: 2px;
+  background-color: ${props => props.theme.colors.foggyGrey};
+  gap: ${props => props.theme.spacing(0.5)};
 `;
 
 export const WeekWrapperStyled = styled.ul`
   display: flex;
-  gap: 2px;
-  background-color: #404040;
+  gap: ${props => props.theme.spacing(0.5)};
+  background-color: ${props => props.theme.colors.foggyGrey};
 `;
 
 export const CellWrapperStyled = styled.li<CellWrapperStyledProps>`
-  min-width: 140px;
-  min-height: 80px;
+  min-width: ${props => props.theme.spacing(35)};
+  min-height: ${props => props.theme.spacing(20)};
 
-  background-color: ${({ $isWeekend }) => ($isWeekend ? '#272829' : '#1e1f21')};
-  color: ${({ $isCurrentMonth }) => ($isCurrentMonth ? '#dddddd' : '#555759')};
-  padding: 4px;
+  background-color: ${({ $isWeekend, theme }) =>
+    $isWeekend ? theme.colors.hazeGray : theme.colors.black};
+  color: ${({ $isCurrentMonth, theme }) =>
+    $isCurrentMonth ? theme.colors.lightGrey : theme.colors.granite};
+  padding: ${props => props.theme.spacing(1)};
 `;
 
 export const RowInCellStyled = styled.p`
@@ -119,13 +126,14 @@ export const RowInCellStyled = styled.p`
   width: 100%;
 `;
 export const DayWrapperStyled = styled.span<DayWrapperStyledProps>`
-  height: 25px;
-  width: 25px;
+  height: ${props => props.theme.spacing(6)};
+  width: ${props => props.theme.spacing(6)};
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ $isToday }) => ($isToday ? '#f00' : 'none')};
-  border-radius: 50%;
+  background-color: ${({ $isToday, theme }) =>
+    $isToday ? theme.colors.red : 'none'};
+  border-radius: ${props => props.theme.radii.round};
   border: none;
   cursor: pointer;
 `;
@@ -157,13 +165,14 @@ export const TaskTextStyled = styled.p`
 
 export const InputFormStyled = styled.input`
   padding-top: 4px 14px;
-  font-size: 0.85rem;
+  font-size: ${props => props.theme.fontSizes.s};
   width: 100%;
   border: unset;
   background-color: #1e1f21;
   color: #dddddd;
   outline: unset;
-  border-bottom: 1px solid #464648;
+  border-bottom: ${props => props.theme.borders.normal};
+  border-bottom-color: ${props => props.theme.colors.darkGrey};
 `;
 
 export const ButtonFormWrapperStyled = styled.div`
