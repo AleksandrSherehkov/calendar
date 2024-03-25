@@ -48,8 +48,9 @@ export const RowInCellStyled = styled.p`
   width: 100%;
 `;
 export const DayWrapperStyled = styled.span<DayWrapperStyledProps>`
-  height: ${props => props.theme.spacing(6)};
-  width: ${props => props.theme.spacing(6)};
+  position: relative;
+  height: ${props => props.theme.spacing(6.5)};
+  width: ${props => props.theme.spacing(6.5)};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,12 +59,37 @@ export const DayWrapperStyled = styled.span<DayWrapperStyledProps>`
   border-radius: ${props => props.theme.radii.round};
   border: none;
   cursor: pointer;
+
+  transition: all ${props => props.theme.transitions.regular};
+
+  &:hover,
+  &:focus {
+    background-color: ${props => props.theme.colors.darkGrey};
+    color: ${props => props.theme.colors.lightGrey};
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  &:hover::after {
+    content: 'Подвійний клік, щоб додати нову';
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.75);
+    border-radius: ${props => props.theme.radii.xxs};
+    padding: 4px 8px;
+    font-size: 0.75em;
+    z-index: 1;
+    display: block;
+  }
 `;
 
 export const TasksListStyled = styled.ul`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
   width: 100%;
   gap: ${props => props.theme.spacing(1)};
@@ -71,11 +97,94 @@ export const TasksListStyled = styled.ul`
 
 export const TaskItemStyled = styled.li`
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-
   gap: ${props => props.theme.spacing(1)};
   width: 100%;
+`;
+
+export const CheckWrapperStyled = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover::after {
+    content: 'Клік для зміни статусу';
+    position: absolute;
+    bottom: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.75);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.75em;
+    z-index: 2;
+    display: block;
+  }
+`;
+export const CheckCompletedStyled = styled(
+  PiCheckFatDuotone
+)<CheckCompletedStyledProps>`
+  flex-shrink: 0;
+  background-color: ${props => props.theme.colors.darkGrey};
+  fill: ${({ $isCompleted, theme }) =>
+    $isCompleted ? theme.colors.green : theme.colors.red};
+
+  cursor: pointer;
+  border-top: ${props => props.theme.borders.normal};
+  border-top-color: ${props => props.theme.colors.grey};
+  border-left: ${props => props.theme.borders.normal};
+  border-left-color: ${props => props.theme.colors.darkGrey};
+  border-right: ${props => props.theme.borders.normal};
+  border-right-color: ${props => props.theme.colors.darkGrey};
+  border-bottom: ${props => props.theme.borders.normal};
+  border-bottom-color: ${props => props.theme.colors.darkGrey};
+
+  transition: all ${props => props.theme.transitions.regular};
+
+  &:hover,
+  &:focus {
+    background-color: ${props => props.theme.colors.darkGrey};
+    color: ${props => props.theme.colors.lightGrey};
+    transform: translateY(-1px);
+    box-shadow: ${props => props.theme.shadows.primary};
+  }
+
+  &:focus {
+    outline: none;
+    border: ${props => props.theme.borders.normal};
+    border-color: ${props => props.theme.colors.lightGrey};
+  }
+`;
+
+export const TaskItemContainerStyled = styled.div`
+  flex: 1;
+  position: relative;
+  width: 88%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &:hover::after {
+    content: 'Подвійний клік щоб редагувати, або видалити';
+    position: absolute;
+    bottom: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.75);
+    border-radius: ${props => props.theme.radii.xxs};
+    padding: 4px 8px;
+    font-size: 0.75em;
+    z-index: 1;
+    display: block;
+    size: 0.75rem;
+  }
 `;
 
 export const TaskTextStyled = styled.p<CheckCompletedStyledProps>`
@@ -89,6 +198,7 @@ export const TaskTextStyled = styled.p<CheckCompletedStyledProps>`
   text-decoration: ${({ $isCompleted }) =>
     $isCompleted ? 'normal' : 'line-through red'};
   padding: 0 4px;
+
   background-color: ${props => props.theme.colors.foggyGrey};
   border-top: ${props => props.theme.borders.normal};
   border-top-color: ${props => props.theme.colors.grey};
@@ -119,38 +229,4 @@ export const TaskTextStyled = styled.p<CheckCompletedStyledProps>`
 export const ShowMoreStyled = styled(TaskTextStyled)`
   font-style: italic;
   text-decoration: none;
-`;
-
-export const CheckCompletedStyled = styled(
-  PiCheckFatDuotone
-)<CheckCompletedStyledProps>`
-  background-color: ${props => props.theme.colors.darkGrey};
-  fill: ${({ $isCompleted, theme }) =>
-    $isCompleted ? theme.colors.green : theme.colors.red};
-
-  cursor: pointer;
-  border-top: ${props => props.theme.borders.normal};
-  border-top-color: ${props => props.theme.colors.grey};
-  border-left: ${props => props.theme.borders.normal};
-  border-left-color: ${props => props.theme.colors.darkGrey};
-  border-right: ${props => props.theme.borders.normal};
-  border-right-color: ${props => props.theme.colors.darkGrey};
-  border-bottom: ${props => props.theme.borders.normal};
-  border-bottom-color: ${props => props.theme.colors.darkGrey};
-
-  transition: all ${props => props.theme.transitions.regular};
-
-  &:hover,
-  &:focus {
-    background-color: ${props => props.theme.colors.darkGrey};
-    color: ${props => props.theme.colors.lightGrey};
-    transform: translateY(-1px);
-    box-shadow: ${props => props.theme.shadows.primary};
-  }
-
-  &:focus {
-    outline: none;
-    border: ${props => props.theme.borders.normal};
-    border-color: ${props => props.theme.colors.lightGrey};
-  }
 `;

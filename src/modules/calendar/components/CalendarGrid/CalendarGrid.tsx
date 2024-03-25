@@ -5,10 +5,12 @@ import { Task } from '../../../../shared/types/definitions';
 import {
   CellWrapperStyled,
   CheckCompletedStyled,
+  CheckWrapperStyled,
   DayWrapperStyled,
   GridWrapperStyled,
   RowInCellStyled,
   ShowMoreStyled,
+  TaskItemContainerStyled,
   TaskItemStyled,
   TaskTextStyled,
   TasksListStyled,
@@ -60,16 +62,21 @@ export const CalendarGrid: FC<CalendarGridProps> = ({
                   .slice(0, 3)
                   .map(task => (
                     <TaskItemStyled key={task._id}>
-                      <CheckCompletedStyled
-                        onClick={() => handleUpdateCompletedTask(task)}
-                        $isCompleted={task.completed || false}
-                      />
-                      <TaskTextStyled
-                        onDoubleClick={() => handleTaskDoubleClick(task)}
-                        $isCompleted={task.completed || false}
-                      >
-                        {task.name}
-                      </TaskTextStyled>
+                      <CheckWrapperStyled>
+                        <CheckCompletedStyled
+                          onClick={() => handleUpdateCompletedTask(task)}
+                          $isCompleted={task.completed || false}
+                        />
+                      </CheckWrapperStyled>
+
+                      <TaskItemContainerStyled>
+                        <TaskTextStyled
+                          onDoubleClick={() => handleTaskDoubleClick(task)}
+                          $isCompleted={task.completed || false}
+                        >
+                          {task.name}
+                        </TaskTextStyled>
+                      </TaskItemContainerStyled>
                     </TaskItemStyled>
                   ))}
                 {tasks.filter(
