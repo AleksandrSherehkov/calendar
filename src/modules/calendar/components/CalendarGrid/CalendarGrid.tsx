@@ -65,14 +65,14 @@ export const CalendarGrid: FC<CalendarGridProps> = ({
                       <CheckWrapperStyled>
                         <CheckCompletedStyled
                           onClick={() => handleUpdateCompletedTask(task)}
-                          $isCompleted={task.completed || false}
+                          $isCompleted={task.completed}
                         />
                       </CheckWrapperStyled>
 
                       <TaskItemContainerStyled>
                         <TaskTextStyled
                           onDoubleClick={() => handleTaskDoubleClick(task)}
-                          $isCompleted={task.completed || false}
+                          $isCompleted={task.completed}
                         >
                           {task.name}
                         </TaskTextStyled>

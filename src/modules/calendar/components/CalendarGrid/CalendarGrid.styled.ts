@@ -131,7 +131,7 @@ export const CheckCompletedStyled = styled(
   flex-shrink: 0;
   background-color: ${props => props.theme.colors.darkGrey};
   fill: ${({ $isCompleted, theme }) =>
-    $isCompleted ? theme.colors.green : theme.colors.red};
+    $isCompleted ? theme.colors.red : theme.colors.green};
 
   cursor: pointer;
   border-top: ${props => props.theme.borders.normal};
@@ -196,7 +196,7 @@ export const TaskTextStyled = styled.p<CheckCompletedStyledProps>`
   cursor: pointer;
   font-size: ${props => props.theme.fontSizes.xs};
   text-decoration: ${({ $isCompleted }) =>
-    $isCompleted ? 'normal' : 'line-through red'};
+    $isCompleted ? 'line-through red' : 'normal'};
   padding: 0 4px;
 
   background-color: ${props => props.theme.colors.foggyGrey};
