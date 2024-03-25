@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { uk } from 'date-fns/locale';
 
 import { format } from 'date-fns';

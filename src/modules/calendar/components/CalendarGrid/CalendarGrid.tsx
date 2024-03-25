@@ -21,6 +21,7 @@ interface CalendarGridProps {
   grid: Date[][];
   tasks: Task[];
   month: number;
+  handleShowMoreClick: (date: Date) => void;
   handleAddNewTaskDoubleClick: (date: Date) => void;
   handleTaskDoubleClick: (task: Task) => void;
   handleUpdateCompletedTask: (task: Task) => void;
@@ -30,6 +31,7 @@ export const CalendarGrid: FC<CalendarGridProps> = ({
   grid,
   tasks,
   month,
+  handleShowMoreClick,
   handleAddNewTaskDoubleClick,
   handleTaskDoubleClick,
   handleUpdateCompletedTask,
@@ -83,7 +85,11 @@ export const CalendarGrid: FC<CalendarGridProps> = ({
                   task =>
                     format(new Date(task.date), 'yyyy-MM-dd') ===
                     format(day, 'yyyy-MM-dd')
-                ).length > 3 && <ShowMoreStyled>показати ще...</ShowMoreStyled>}
+                ).length > 3 && (
+                  <ShowMoreStyled onClick={() => handleShowMoreClick(day)}>
+                    показати ще...
+                  </ShowMoreStyled>
+                )}
               </TasksListStyled>
             </CellWrapperStyled>
           ))}

@@ -29,7 +29,7 @@ import { DaysOfWeek } from '../DaysOfWeek/DaysOfWeek';
 import { CalendarGrid } from '../CalendarGrid/CalendarGrid';
 import { TaskForm } from '../../../taskForm/components/TaskForm/TaskForm';
 import { Title } from '../../../../shared/components/Title/Title';
-import { DISPLAY_MODE_MONTH } from '../../heplers/constants';
+import { DISPLAY_MODE_DAY, DISPLAY_MODE_MONTH } from '../../heplers/constants';
 import { DayPlans } from '../../../dayPlan/components/DayPlans';
 
 const monthsInNominativeCase = [
@@ -193,6 +193,11 @@ export const Calendar: FC = () => {
     }
   };
 
+  const handleShowMoreClick = (date: Date) => {
+    setSelectedDate(date);
+    setDisplayMode(DISPLAY_MODE_DAY);
+  };
+
   const handleInputChange = (field: keyof Task, value: string) => {
     setCurrentTask(prevTask => ({
       ...prevTask,
@@ -246,6 +251,7 @@ export const Calendar: FC = () => {
             <CalendarGrid
               grid={grid}
               tasks={tasks}
+              handleShowMoreClick={handleShowMoreClick}
               handleUpdateCompletedTask={handleUpdateCompletedTask}
               handleAddNewTaskDoubleClick={handleAddNewTaskDoubleClick}
               handleTaskDoubleClick={handleTaskDoubleClick}
