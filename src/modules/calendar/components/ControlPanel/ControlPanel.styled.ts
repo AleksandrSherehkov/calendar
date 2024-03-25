@@ -35,10 +35,30 @@ export const ButtonStyled = styled.button`
   border: unset;
   border-radius: ${props => props.theme.radii.xxs};
   background-color: ${props => props.theme.colors.granite};
-
   padding: 2px 8px;
-
   color: ${props => props.theme.colors.darkWhite};
+  border-top: ${props => props.theme.borders.normal};
+  border-top-color: ${props => props.theme.colors.grey};
+  border-left: ${props => props.theme.borders.normal};
+  border-left-color: ${props => props.theme.colors.darkGrey};
+  border-right: ${props => props.theme.borders.normal};
+  border-right-color: ${props => props.theme.colors.darkGrey};
+  border-bottom: ${props => props.theme.borders.normal};
+  border-bottom-color: ${props => props.theme.colors.darkGrey};
+  transition: all ${props => props.theme.transitions.regular};
+
+  &:hover,
+  &:focus {
+    background-color: ${props => props.theme.colors.darkGrey};
+    color: ${props => props.theme.colors.lightGrey};
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  &:focus {
+    outline: none;
+    border: ${props => props.theme.borders.normal};
+    border-color: ${props => props.theme.colors.lightGrey};
+  }
 `;
 
 export const TodayButtonStyled = styled(ButtonStyled)`

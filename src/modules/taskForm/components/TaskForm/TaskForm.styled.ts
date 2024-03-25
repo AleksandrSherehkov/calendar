@@ -60,14 +60,14 @@ export const ButtonFormStyled = styled.button`
   border-right-color: ${props => props.theme.colors.darkGrey};
   border-bottom: ${props => props.theme.borders.normal};
   border-bottom-color: ${props => props.theme.colors.darkGrey};
-  transition: all 0.3s ease, transform 0.3s ease;
+  transition: all ${props => props.theme.transitions.regular};
 
   &:hover,
   &:focus {
     background-color: ${props => props.theme.colors.darkGrey};
     color: ${props => props.theme.colors.lightGrey};
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+    box-shadow: ${props => props.theme.shadows.primary};
   }
 
   &:focus {

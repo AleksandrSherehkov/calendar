@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { PiCheckFatDuotone } from 'react-icons/pi';
 
 interface CellWrapperStyledProps {
   $isWeekend: boolean;
@@ -7,6 +8,10 @@ interface CellWrapperStyledProps {
 
 interface DayWrapperStyledProps {
   $isToday: boolean;
+}
+
+interface CheckCompletedStyledProps {
+  $isCompleted?: boolean;
 }
 
 export const GridWrapperStyled = styled.div`
@@ -30,7 +35,8 @@ export const CellWrapperStyled = styled.li<CellWrapperStyledProps>`
 
   background-color: ${({ $isWeekend, theme }) =>
     $isWeekend ? theme.colors.hazeGray : theme.colors.black};
-  color: ${({ $isCurrentMonth }) => ($isCurrentMonth ? '#dddddd' : '#555759')};
+  color: ${({ $isCurrentMonth, theme }) =>
+    $isCurrentMonth ? theme.colors.lightGrey : theme.colors.granite};
   padding: ${props => props.theme.spacing(1)};
 `;
 
@@ -67,12 +73,12 @@ export const TaskItemStyled = styled.li`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  background-color: ${props => props.theme.colors.foggyGrey};
 
+  gap: ${props => props.theme.spacing(1)};
   width: 100%;
 `;
 
-export const TaskTextStyled = styled.p`
+export const TaskTextStyled = styled.p<CheckCompletedStyledProps>`
   width: 100%;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -80,6 +86,8 @@ export const TaskTextStyled = styled.p`
   color: ${props => props.theme.colors.lightGrey};
   cursor: pointer;
   font-size: ${props => props.theme.fontSizes.xs};
+  text-decoration: ${({ $isCompleted }) =>
+    $isCompleted ? 'normal' : 'line-through red'};
   padding: 0 4px;
   background-color: ${props => props.theme.colors.foggyGrey};
   border-top: ${props => props.theme.borders.normal};
@@ -90,8 +98,59 @@ export const TaskTextStyled = styled.p`
   border-right-color: ${props => props.theme.colors.darkGrey};
   border-bottom: ${props => props.theme.borders.normal};
   border-bottom-color: ${props => props.theme.colors.darkGrey};
+
+  transition: all ${props => props.theme.transitions.regular};
+
+  &:hover,
+  &:focus {
+    background-color: ${props => props.theme.colors.darkGrey};
+    color: ${props => props.theme.colors.lightGrey};
+    transform: translateY(-1px);
+    box-shadow: ${props => props.theme.shadows.primary};
+  }
+
+  &:focus {
+    outline: none;
+    border: ${props => props.theme.borders.normal};
+    border-color: ${props => props.theme.colors.lightGrey};
+  }
 `;
 
 export const ShowMoreStyled = styled(TaskTextStyled)`
   font-style: italic;
+  text-decoration: none;
+`;
+
+export const CheckCompletedStyled = styled(
+  PiCheckFatDuotone
+)<CheckCompletedStyledProps>`
+  background-color: ${props => props.theme.colors.darkGrey};
+  fill: ${({ $isCompleted, theme }) =>
+    $isCompleted ? theme.colors.green : theme.colors.red};
+
+  cursor: pointer;
+  border-top: ${props => props.theme.borders.normal};
+  border-top-color: ${props => props.theme.colors.grey};
+  border-left: ${props => props.theme.borders.normal};
+  border-left-color: ${props => props.theme.colors.darkGrey};
+  border-right: ${props => props.theme.borders.normal};
+  border-right-color: ${props => props.theme.colors.darkGrey};
+  border-bottom: ${props => props.theme.borders.normal};
+  border-bottom-color: ${props => props.theme.colors.darkGrey};
+
+  transition: all ${props => props.theme.transitions.regular};
+
+  &:hover,
+  &:focus {
+    background-color: ${props => props.theme.colors.darkGrey};
+    color: ${props => props.theme.colors.lightGrey};
+    transform: translateY(-1px);
+    box-shadow: ${props => props.theme.shadows.primary};
+  }
+
+  &:focus {
+    outline: none;
+    border: ${props => props.theme.borders.normal};
+    border-color: ${props => props.theme.colors.lightGrey};
+  }
 `;

@@ -4,6 +4,7 @@ import { format, getMonth } from 'date-fns';
 import { Task } from '../../../../shared/types/definitions';
 import {
   CellWrapperStyled,
+  CheckCompletedStyled,
   DayWrapperStyled,
   GridWrapperStyled,
   RowInCellStyled,
@@ -20,6 +21,7 @@ interface CalendarGridProps {
   month: number;
   handleAddNewTaskDoubleClick: (date: Date) => void;
   handleTaskDoubleClick: (task: Task) => void;
+  handleUpdateCompletedTask: (task: Task) => void;
 }
 
 export const CalendarGrid: FC<CalendarGridProps> = ({
@@ -28,6 +30,7 @@ export const CalendarGrid: FC<CalendarGridProps> = ({
   month,
   handleAddNewTaskDoubleClick,
   handleTaskDoubleClick,
+  handleUpdateCompletedTask,
 }) => {
   return (
     <GridWrapperStyled>
@@ -57,8 +60,13 @@ export const CalendarGrid: FC<CalendarGridProps> = ({
                   .slice(0, 3)
                   .map(task => (
                     <TaskItemStyled key={task._id}>
+                      <CheckCompletedStyled
+                        onClick={() => handleUpdateCompletedTask(task)}
+                        $isCompleted={task.completed || false}
+                      />
                       <TaskTextStyled
                         onDoubleClick={() => handleTaskDoubleClick(task)}
+                        $isCompleted={task.completed || false}
                       >
                         {task.name}
                       </TaskTextStyled>

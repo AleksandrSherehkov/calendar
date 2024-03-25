@@ -8,8 +8,8 @@ export const theme = {
     foggyGrey: '#404040',
     hazeGray: '#272829',
     lightGrey: '#dddddd',
-    red: '#ff0000',
-    modalGrey: 'rgba(0, 0, 0, 0.35)',
+    red: '#de4328',
+    green: '#3fc406',
   },
 
   spacing: (value: number) => `${4 * value}px`,
@@ -66,11 +66,10 @@ export const theme = {
   },
 
   shadows: {
-    primary: '0 0 0 1px #1a1a1a, 0 8px 20px 6px #888888',
-    secondary: '7px 13px 14px rgba(116, 177, 232, 0.24)',
+    primary: '0 4px 8px rgba(0, 0, 0, 0.2);',
   },
 
   transitions: {
-    regular: '250ms cubic-bezier(0.4, 0, 0.2, 1)',
+    regular: '300ms cubic-bezier(0.4, 0, 0.2, 1)',
   },
 };

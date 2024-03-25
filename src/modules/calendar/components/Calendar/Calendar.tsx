@@ -19,6 +19,7 @@ import {
   getAllTasks,
   getTaskById,
   updateTaskById,
+  updateTaskCompleted,
 } from '../../../../services/api/tasksApi';
 import Modal from '../../../../shared/components/Modal/Modal';
 import { Task } from '../../../../shared/types/definitions';
@@ -83,6 +84,7 @@ export const Calendar: FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasks, setTasks] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task>(initialTaskState);
+
   const [isEditing, setIsEditing] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -139,6 +141,21 @@ export const Calendar: FC = () => {
         setCurrentTask(initialTaskState);
       } catch (error) {
         console.error('Failed to update task', error);
+      }
+    }
+  };
+
+  const handleUpdateCompletedTask = async (task: Task) => {
+    if (task._id) {
+      try {
+        const updatedTask = await updateTaskCompleted(
+          task._id,
+          !task.completed
+        );
+
+        setCurrentTask(updatedTask);
+      } catch (error) {
+        console.error('Failed to update task completed status', error);
       }
     }
   };
@@ -219,6 +236,7 @@ export const Calendar: FC = () => {
         <CalendarGrid
           grid={grid}
           tasks={tasks}
+          handleUpdateCompletedTask={handleUpdateCompletedTask}
           handleAddNewTaskDoubleClick={handleAddNewTaskDoubleClick}
           handleTaskDoubleClick={handleTaskDoubleClick}
           month={month}
