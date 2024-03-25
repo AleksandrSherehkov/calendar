@@ -30,8 +30,11 @@ export const WeekWrapperStyled = styled.ul`
 `;
 
 export const CellWrapperStyled = styled.li<CellWrapperStyledProps>`
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing(1)};
   width: ${props => props.theme.spacing(45)};
-  min-height: ${props => props.theme.spacing(27)};
+  min-height: ${props => props.theme.spacing(28.5)};
 
   background-color: ${({ $isWeekend, theme }) =>
     $isWeekend ? theme.colors.hazeGray : theme.colors.black};

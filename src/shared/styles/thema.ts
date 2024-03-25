@@ -60,9 +60,6 @@ export const theme = {
     round: '50%',
     xxs: '4px',
     xs: '8px',
-    // s: '20px',
-    // m: '24px',
-    // l: '40px',
   },
 
   shadows: {

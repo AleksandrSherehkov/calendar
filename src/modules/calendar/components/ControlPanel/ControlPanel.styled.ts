@@ -1,4 +1,7 @@
 import styled from 'styled-components';
+interface ButtonModeProps {
+  $isActive?: boolean;
+}
 
 export const ControlPanelWrapperStyled = styled.div`
   display: flex;
@@ -12,14 +15,10 @@ export const TextWrapperStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  width: ${props => props.theme.spacing(71)};
   font-size: ${props => props.theme.fontSizes.xl};
   gap: ${props => props.theme.spacing(2)};
-`;
-export const NameMonthStyled = styled.p`
-  font-weight: bold;
-  &::first-letter {
-    text-transform: uppercase;
-  }
 `;
 
 export const WraperButtonStyled = styled.div`
@@ -28,9 +27,9 @@ export const WraperButtonStyled = styled.div`
   align-items: center;
   gap: ${props => props.theme.spacing(1)};
 `;
-export const ButtonStyled = styled.button`
+export const ButtonStyled = styled.button<ButtonModeProps>`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   border: unset;
   border-radius: ${props => props.theme.radii.xxs};
@@ -51,7 +50,7 @@ export const ButtonStyled = styled.button`
   &:focus {
     background-color: ${props => props.theme.colors.darkGrey};
     color: ${props => props.theme.colors.lightGrey};
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: ${props => props.theme.shadows.primary};
   }
 
   &:focus {
@@ -61,6 +60,27 @@ export const ButtonStyled = styled.button`
   }
 `;
 
+export const ButtonModeStyled = styled(ButtonStyled)`
+  border: ${({ $isActive, theme }) =>
+    $isActive ? theme.borders.normal : theme.borders.none};
+  border-color: ${({ $isActive, theme }) =>
+    $isActive ? theme.colors.lightGrey : null};
+`;
+
+export const ButtonDayStyled = styled(ButtonStyled)`
+  transform: rotate(90deg);
+  justify-content: center;
+  align-items: center;
+  width: ${props => props.theme.spacing(6.5)};
+`;
+
+export const WrapperDayButtonStyled = styled(WraperButtonStyled)`
+  justify-content: center;
+  align-items: center;
+`;
+
 export const TodayButtonStyled = styled(ButtonStyled)`
+  width: ${props => props.theme.spacing(54)};
+
   font-weight: bold;
 `;

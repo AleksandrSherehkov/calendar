@@ -29,6 +29,8 @@ import { DaysOfWeek } from '../DaysOfWeek/DaysOfWeek';
 import { CalendarGrid } from '../CalendarGrid/CalendarGrid';
 import { TaskForm } from '../../../taskForm/components/TaskForm/TaskForm';
 import { Title } from '../../../../shared/components/Title/Title';
+import { DISPLAY_MODE_MONTH } from '../../heplers/constants';
+import { DayPlans } from '../../../dayPlan/components/DayPlans';
 
 const monthsInNominativeCase = [
   'Січень',
@@ -84,15 +86,17 @@ export const Calendar: FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasks, setTasks] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task>(initialTaskState);
-
   const [isEditing, setIsEditing] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [displayMode, setDisplayMode] = useState('month');
 
   const year = getYear(selectedDate);
   const month = getMonth(selectedDate);
   const grid = generateCalendarGrid(year, month);
-  const monthName = monthsInNominativeCase[getMonth(selectedDate)];
+  const monthName = monthsInNominativeCase[month];
 
+  const nextDay = () => setSelectedDate(current => addDays(current, 1));
+  const previousDay = () => setSelectedDate(current => addDays(current, -1));
   const previousMonth = () =>
     setSelectedDate(current => addMonths(current, -1));
   const nextMonth = () => setSelectedDate(current => addMonths(current, 1));
@@ -226,21 +230,35 @@ export const Calendar: FC = () => {
         <ControlPanel
           monthName={monthName}
           selectedDate={selectedDate}
+          previousDay={previousDay}
+          nextDay={nextDay}
           previousMonth={previousMonth}
           nextMonth={nextMonth}
           previousYear={previousYear}
           nextYear={nextYear}
           resetToToday={resetToToday}
+          displayMode={displayMode}
+          setDisplayMode={setDisplayMode}
         />
-        <DaysOfWeek />
-        <CalendarGrid
-          grid={grid}
-          tasks={tasks}
-          handleUpdateCompletedTask={handleUpdateCompletedTask}
-          handleAddNewTaskDoubleClick={handleAddNewTaskDoubleClick}
-          handleTaskDoubleClick={handleTaskDoubleClick}
-          month={month}
-        />
+        {displayMode === DISPLAY_MODE_MONTH ? (
+          <>
+            <DaysOfWeek />
+            <CalendarGrid
+              grid={grid}
+              tasks={tasks}
+              handleUpdateCompletedTask={handleUpdateCompletedTask}
+              handleAddNewTaskDoubleClick={handleAddNewTaskDoubleClick}
+              handleTaskDoubleClick={handleTaskDoubleClick}
+              month={month}
+            />
+          </>
+        ) : (
+          <DayPlans
+            tasks={tasks}
+            selectedDay={selectedDate}
+            handleUpdateCompletedTask={handleUpdateCompletedTask}
+          />
+        )}
       </CalendarWrapperStyled>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <TaskForm

@@ -17,5 +17,4 @@ export const CalendarWrapperStyled = styled.div`
   overflow: hidden;
   box-shadow: ${props => props.theme.shadows.primary};
   background-color: ${props => props.theme.colors.black};
-  padding-top: ${props => props.theme.spacing(3)};
 `;
