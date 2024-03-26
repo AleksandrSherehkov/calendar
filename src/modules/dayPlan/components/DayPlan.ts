@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { PiCheckFatDuotone } from 'react-icons/pi';
+import { BiTaskX } from 'react-icons/bi';
 
 interface CheckCompletedStyledProps {
   $isCompleted?: boolean;
@@ -105,5 +106,13 @@ export const TaskTextStyled = styled.p<CheckCompletedStyledProps>`
 
 export const ContainerFormStyled = styled.div`
   flex: 1;
+  display: flex;
+  justify-content: center;
+
   background-color: ${props => props.theme.colors.hazeGray};
+`;
+
+export const NoTaskStyled = styled(BiTaskX)`
+  fill: ${props => props.theme.colors.lightGrey};
+  margin-top: 50%;
 `;

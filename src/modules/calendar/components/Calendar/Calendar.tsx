@@ -115,6 +115,12 @@ export const Calendar: FC = () => {
     })();
   }, [year, month, currentTask]);
 
+  useEffect(() => {
+    if (displayMode === DISPLAY_MODE_MONTH) {
+      setIsModalOpen(false);
+    }
+  }, [displayMode]);
+
   const handleAddNewTaskDoubleClick = (date: Date) => {
     setCurrentTask({ ...initialTaskState, date: date.toISOString() });
     setIsEditing(false);
@@ -263,19 +269,29 @@ export const Calendar: FC = () => {
             tasks={tasks}
             selectedDay={selectedDate}
             handleUpdateCompletedTask={handleUpdateCompletedTask}
+            currentTask={currentTask}
+            handleInputChange={handleInputChange}
+            handleFormSubmit={handleFormSubmit}
+            handleCloseModal={handleCloseModal}
+            deleteTask={deleteTask}
+            isEditing={isEditing}
+            handleTaskDoubleClick={handleTaskDoubleClick}
+            isOpen={isModalOpen}
           />
         )}
       </CalendarWrapperStyled>
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <TaskForm
-          currentTask={currentTask}
-          handleInputChange={handleInputChange}
-          handleFormSubmit={handleFormSubmit}
-          handleCloseModal={handleCloseModal}
-          deleteTask={deleteTask}
-          isEditing={isEditing}
-        />
-      </Modal>
+      {isModalOpen && displayMode === DISPLAY_MODE_MONTH && (
+        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+          <TaskForm
+            currentTask={currentTask}
+            handleInputChange={handleInputChange}
+            handleFormSubmit={handleFormSubmit}
+            handleCloseModal={handleCloseModal}
+            deleteTask={deleteTask}
+            isEditing={isEditing}
+          />
+        </Modal>
+      )}
     </>
   );
 };

@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import {
   ContainerFormStyled,
   ContainerWraperStyled,
+  NoTaskStyled,
   TaskItemStyled,
   TaskListWrapper,
 } from './DayPlan';
@@ -11,17 +12,34 @@ import {
   CheckCompletedStyled,
   TaskTextStyled,
 } from '../../calendar/components/CalendarGrid/CalendarGrid.styled';
+import { TaskForm } from '../../taskForm/components/TaskForm/TaskForm';
 
 interface DayPlansProps {
   tasks: Task[];
   selectedDay: Date;
   handleUpdateCompletedTask: (task: Task) => void;
+  currentTask: Task;
+  handleInputChange: (field: keyof Task, value: string) => void;
+  handleFormSubmit: (event: React.FormEvent) => void;
+  handleCloseModal: () => void;
+  deleteTask: (id: string) => void;
+  isEditing: boolean;
+  handleTaskDoubleClick: (task: Task) => void;
+  isOpen: boolean;
 }
 
 export const DayPlans: FC<DayPlansProps> = ({
   tasks,
   selectedDay,
+  handleTaskDoubleClick,
   handleUpdateCompletedTask,
+  currentTask,
+  handleInputChange,
+  handleFormSubmit,
+  handleCloseModal,
+  deleteTask,
+  isEditing,
+  isOpen,
 }) => {
   const tasksForSelectedDay = tasks.filter(
     task =>
@@ -37,13 +55,30 @@ export const DayPlans: FC<DayPlansProps> = ({
               onClick={() => handleUpdateCompletedTask(task)}
               $isCompleted={task.completed}
             />
-            <TaskTextStyled $isCompleted={task.completed}>
+            <TaskTextStyled
+              data-tooltip="Подвійний клік щоб редагувати, або видалити"
+              $isCompleted={task.completed}
+              onClick={() => handleTaskDoubleClick(task)}
+            >
               {task.name}
             </TaskTextStyled>
           </TaskItemStyled>
         ))}
       </TaskListWrapper>
-      <ContainerFormStyled>FORM</ContainerFormStyled>
+      <ContainerFormStyled>
+        {isOpen ? (
+          <TaskForm
+            currentTask={currentTask}
+            handleInputChange={handleInputChange}
+            handleFormSubmit={handleFormSubmit}
+            handleCloseModal={handleCloseModal}
+            deleteTask={deleteTask}
+            isEditing={isEditing}
+          />
+        ) : (
+          <NoTaskStyled size={150} />
+        )}
+      </ContainerFormStyled>
     </ContainerWraperStyled>
   );
 };
