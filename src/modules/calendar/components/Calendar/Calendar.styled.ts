@@ -5,6 +5,7 @@ export const CalendarWrapperStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-top: ${props => props.theme.spacing(1.5)};
   border-top: ${props => props.theme.borders.normal};
   border-top-color: ${props => props.theme.colors.grey};
   border-left: ${props => props.theme.borders.normal};
