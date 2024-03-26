@@ -1,9 +1,12 @@
 import styled from 'styled-components';
 import { PiCheckFatDuotone } from 'react-icons/pi';
 import { BiTaskX } from 'react-icons/bi';
-
+import { BsPlusSquareFill } from 'react-icons/bs';
 interface CheckCompletedStyledProps {
   $isCompleted?: boolean;
+}
+interface ContainerFormStyledProps {
+  $isOpen: boolean;
 }
 
 export const ContainerWraperStyled = styled.div`
@@ -104,15 +107,53 @@ export const TaskTextStyled = styled.p<CheckCompletedStyledProps>`
   }
 `;
 
-export const ContainerFormStyled = styled.div`
+export const ContainerFormStyled = styled.div<ContainerFormStyledProps>`
+  padding: ${({ $isOpen, theme }) => ($isOpen ? 0 : theme.spacing(4))};
   flex: 1;
+  flex-direction: column;
   display: flex;
-  justify-content: center;
+  width: 100%;
 
   background-color: ${props => props.theme.colors.hazeGray};
 `;
 
+export const AddIconButton = styled(BsPlusSquareFill)`
+  display: flex;
+  align-self: flex-start;
+  fill: ${props => props.theme.colors.granite};
+  color: ${props => props.theme.colors.lightGrey};
+  cursor: pointer;
+  border-radius: 8px;
+  color: ${props => props.theme.colors.darkWhite};
+  border-top: ${props => props.theme.borders.normal};
+  border-top-color: ${props => props.theme.colors.grey};
+  border-left: ${props => props.theme.borders.normal};
+  border-left-color: ${props => props.theme.colors.darkGrey};
+  border-right: ${props => props.theme.borders.normal};
+  border-right-color: ${props => props.theme.colors.darkGrey};
+  border-bottom: ${props => props.theme.borders.normal};
+  border-bottom-color: ${props => props.theme.colors.darkGrey};
+  transition: all ${props => props.theme.transitions.regular};
+
+  &:hover,
+  &:focus {
+    background-color: ${props => props.theme.colors.darkGrey};
+    color: ${props => props.theme.colors.lightGrey};
+    transform: translateY(-1px);
+    box-shadow: ${props => props.theme.shadows.primary};
+  }
+
+  &:focus {
+    outline: none;
+    border: ${props => props.theme.borders.normal};
+    border-color: ${props => props.theme.colors.lightGrey};
+  }
+`;
+
 export const NoTaskStyled = styled(BiTaskX)`
+  display: flex;
+  align-self: center;
   fill: ${props => props.theme.colors.lightGrey};
   margin-top: 50%;
+  opacity: ${props => props.theme.opacities.dark};
 `;

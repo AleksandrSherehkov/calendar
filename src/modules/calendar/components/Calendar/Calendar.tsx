@@ -87,6 +87,7 @@ export const Calendar: FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task>(initialTaskState);
   const [isEditing, setIsEditing] = useState(true);
+  console.log(`isEditing:`, isEditing);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [displayMode, setDisplayMode] = useState('month');
 
@@ -190,6 +191,7 @@ export const Calendar: FC = () => {
       if (task._id) {
         const fetchedTask = await getTaskById(task._id);
         setCurrentTask(fetchedTask);
+        setIsEditing(true);
         setIsModalOpen(true);
       } else {
         throw new Error('Task ID is undefined');
@@ -268,6 +270,7 @@ export const Calendar: FC = () => {
           <DayPlans
             tasks={tasks}
             selectedDay={selectedDate}
+            handleAddNewTaskDoubleClick={handleAddNewTaskDoubleClick}
             handleUpdateCompletedTask={handleUpdateCompletedTask}
             currentTask={currentTask}
             handleInputChange={handleInputChange}

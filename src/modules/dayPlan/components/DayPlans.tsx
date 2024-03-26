@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Task } from '../../../shared/types/definitions';
 import { format } from 'date-fns';
 import {
+  AddIconButton,
   ContainerFormStyled,
   ContainerWraperStyled,
   NoTaskStyled,
@@ -17,6 +18,7 @@ import { TaskForm } from '../../taskForm/components/TaskForm/TaskForm';
 interface DayPlansProps {
   tasks: Task[];
   selectedDay: Date;
+  handleAddNewTaskDoubleClick: (date: Date) => void;
   handleUpdateCompletedTask: (task: Task) => void;
   currentTask: Task;
   handleInputChange: (field: keyof Task, value: string) => void;
@@ -31,6 +33,7 @@ interface DayPlansProps {
 export const DayPlans: FC<DayPlansProps> = ({
   tasks,
   selectedDay,
+  handleAddNewTaskDoubleClick,
   handleTaskDoubleClick,
   handleUpdateCompletedTask,
   currentTask,
@@ -46,6 +49,7 @@ export const DayPlans: FC<DayPlansProps> = ({
       format(new Date(task.date), 'yyyy-MM-dd') ===
       format(selectedDay, 'yyyy-MM-dd')
   );
+
   return (
     <ContainerWraperStyled>
       <TaskListWrapper>
@@ -65,7 +69,7 @@ export const DayPlans: FC<DayPlansProps> = ({
           </TaskItemStyled>
         ))}
       </TaskListWrapper>
-      <ContainerFormStyled>
+      <ContainerFormStyled $isOpen={isOpen}>
         {isOpen ? (
           <TaskForm
             currentTask={currentTask}
@@ -76,7 +80,13 @@ export const DayPlans: FC<DayPlansProps> = ({
             isEditing={isEditing}
           />
         ) : (
-          <NoTaskStyled size={150} />
+          <>
+            <AddIconButton
+              size={45}
+              onClick={() => handleAddNewTaskDoubleClick(selectedDay)}
+            />
+            <NoTaskStyled size={150} />
+          </>
         )}
       </ContainerFormStyled>
     </ContainerWraperStyled>
