@@ -109,10 +109,10 @@ export const TaskTextStyled = styled.p<CheckCompletedStyledProps>`
 
 export const ContainerFormStyled = styled.div<ContainerFormStyledProps>`
   padding: ${({ $isOpen, theme }) => ($isOpen ? 0 : theme.spacing(4))};
+  min-width: 434px;
   flex: 1;
   flex-direction: column;
   display: flex;
-  width: 100%;
 
   background-color: ${props => props.theme.colors.hazeGray};
 `;
