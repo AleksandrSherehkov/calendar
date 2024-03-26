@@ -123,7 +123,7 @@ export const AddIconButton = styled(BsPlusSquareFill)`
   fill: ${props => props.theme.colors.granite};
   color: ${props => props.theme.colors.lightGrey};
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: ${props => props.theme.radii.xs};
   color: ${props => props.theme.colors.darkWhite};
   border-top: ${props => props.theme.borders.normal};
   border-top-color: ${props => props.theme.colors.grey};
