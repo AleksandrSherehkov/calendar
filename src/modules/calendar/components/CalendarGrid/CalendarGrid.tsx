@@ -58,11 +58,12 @@ export const CalendarGrid: FC<CalendarGridProps> = ({
                       format(day, 'yyyy-MM-dd')
                   )
                   .map(holiday => (
-                    <WrapperHolidayStyled key={holiday.name}>
-                      <HolidayStyled data-title={holiday.localName}>
-                        {holiday.localName}
-                      </HolidayStyled>
-                    </WrapperHolidayStyled>
+                    <HolidayStyled
+                      key={holiday.name}
+                      data-title={holiday.localName}
+                    >
+                      {holiday.localName}
+                    </HolidayStyled>
                   ))}
                 <DayWrapperStyled
                   onDoubleClick={() => handleAddNewTaskDoubleClick(day)}

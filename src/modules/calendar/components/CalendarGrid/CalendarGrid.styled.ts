@@ -43,7 +43,8 @@ export const CellWrapperStyled = styled.li<CellWrapperStyledProps>`
   padding: ${props => props.theme.spacing(1)};
 `;
 
-export const RowInCellStyled = styled.p`
+export const RowInCellStyled = styled.div`
+  position: relative;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -51,12 +52,8 @@ export const RowInCellStyled = styled.p`
   width: 100%;
 `;
 
-export const WrapperHolidayStyled = styled.div`
-  position: relative;
-  width: 84%;
-`;
-
 export const HolidayStyled = styled.p`
+  width: 84%;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -68,7 +65,7 @@ export const HolidayStyled = styled.p`
     content: attr(data-title);
     position: absolute;
     width: max-content;
-    bottom: 150%;
+    bottom: 100%;
     left: 0;
     transform: translateX(-50%);
     padding: 4px 8px;

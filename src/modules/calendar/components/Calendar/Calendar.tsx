@@ -100,7 +100,6 @@ export const Calendar: FC = () => {
   const [filterQuery, setFilterQuery] = useState('');
   const [debouncedFilterQuery] = useDebounce(filterQuery, 300);
   const [holidays, setHolidays] = useState<PublicHoliday[]>([]);
-  console.log(`holidays:`, holidays);
 
   const year = getYear(selectedDate);
   const month = getMonth(selectedDate);
