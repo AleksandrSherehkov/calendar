@@ -27,7 +27,7 @@ import {
   updateTaskCompleted,
 } from '../../../../services/api/tasksApi';
 import Modal from '../../../../shared/components/Modal/Modal';
-import { Task } from '../../../../shared/types/definitions';
+import { PublicHoliday, Task } from '../../../../shared/types/definitions';
 
 import { ControlPanel } from '../ControlPanel/ControlPanel';
 import { DaysOfWeek } from '../DaysOfWeek/DaysOfWeek';
@@ -37,6 +37,7 @@ import { Title } from '../../../../shared/components/Title/Title';
 import { DISPLAY_MODE_DAY, DISPLAY_MODE_MONTH } from '../../heplers/constants';
 import { DayPlans } from '../../../dayPlan/components/DayPlans';
 import { useDebounce } from 'use-debounce';
+import { getPublicHolidays } from '../../../../services/api/nagerDataV3Api';
 
 const monthsInNominativeCase = [
   'Січень',
@@ -98,7 +99,8 @@ export const Calendar: FC = () => {
   const [displayMode, setDisplayMode] = useState('month');
   const [filterQuery, setFilterQuery] = useState('');
   const [debouncedFilterQuery] = useDebounce(filterQuery, 300);
-  console.log(`filterQuery:`, filterQuery);
+  const [holidays, setHolidays] = useState<PublicHoliday[]>([]);
+  console.log(`holidays:`, holidays);
 
   const year = getYear(selectedDate);
   const month = getMonth(selectedDate);
@@ -113,6 +115,19 @@ export const Calendar: FC = () => {
   const previousYear = () => setSelectedDate(current => addYears(current, -1));
   const nextYear = () => setSelectedDate(current => addYears(current, 1));
   const resetToToday = () => setSelectedDate(new Date());
+
+  useEffect(() => {
+    const fetchHolidays = async () => {
+      try {
+        const holidays = await getPublicHolidays(year, 'UA');
+        setHolidays(holidays);
+      } catch (error) {
+        console.error('Failed to fetch holidays', error);
+      }
+    };
+
+    fetchHolidays();
+  }, [year, month]);
 
   useEffect(() => {
     (async () => {
@@ -287,6 +302,7 @@ export const Calendar: FC = () => {
               handleAddNewTaskDoubleClick={handleAddNewTaskDoubleClick}
               handleTaskDoubleClick={handleTaskDoubleClick}
               month={month}
+              holidays={holidays}
             />
           </>
         ) : (

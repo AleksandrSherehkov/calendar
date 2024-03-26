@@ -25,12 +25,12 @@ export const WrapperSearchStyled = styled.div`
 
   align-items: center;
   width: 20%;
-  margin-bottom: 20px;
+  margin-bottom: ${props => props.theme.spacing(5)};
 `;
 
 export const InputFormStyled = styled.input`
   width: 100%;
-  padding: 4px 0;
+  padding: 4px 4px;
   border: unset;
 
   background-color: #1e1f21;

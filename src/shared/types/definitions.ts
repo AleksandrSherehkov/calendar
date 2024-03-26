@@ -15,3 +15,15 @@ export interface GetAllQueryParams {
   month?: number;
   year?: number;
 }
+
+export interface PublicHoliday {
+  date: string;
+  localName: string;
+  name: string;
+  countryCode: string;
+  fixed: boolean;
+  global: boolean;
+  counties: string[];
+  launchYear: number | null;
+  types: string[];
+}

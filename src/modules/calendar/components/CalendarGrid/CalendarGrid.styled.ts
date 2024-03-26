@@ -50,6 +50,38 @@ export const RowInCellStyled = styled.p`
 
   width: 100%;
 `;
+
+export const WrapperHolidayStyled = styled.div`
+  position: relative;
+  width: 84%;
+`;
+
+export const HolidayStyled = styled.p`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  color: ${props => props.theme.colors.red};
+  cursor: pointer;
+  font-size: ${props => props.theme.fontSizes.xs};
+
+  &:hover::after {
+    content: attr(data-title);
+    position: absolute;
+    width: max-content;
+    bottom: 150%;
+    left: 0;
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    background: ${props => props.theme.colors.red};
+    color: white;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    z-index: 10;
+    white-space: nowrap;
+    text-align: center;
+  }
+`;
+
 export const DayWrapperStyled = styled.span<DayWrapperStyledProps>`
   position: relative;
   height: ${props => props.theme.spacing(6.5)};

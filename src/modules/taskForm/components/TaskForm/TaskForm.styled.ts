@@ -11,7 +11,7 @@ export const FormStyled = styled.form`
 
 export const InputFormStyled = styled.input`
   width: 100%;
-  padding: 4px 0;
+  padding: 4px 4px;
   border: unset;
 
   background-color: #1e1f21;
@@ -25,7 +25,7 @@ export const InputFormStyled = styled.input`
 
 export const TextAreaStyled = styled.textarea`
   width: 100%;
-  padding: 4px 0;
+  padding: 4px 4px;
   font-size: ${props => props.theme.fontSizes.s};
   border: unset;
   background-color: #1e1f21;

@@ -1,13 +1,14 @@
 import { FC } from 'react';
 
 import { format, getMonth } from 'date-fns';
-import { Task } from '../../../../shared/types/definitions';
+import { PublicHoliday, Task } from '../../../../shared/types/definitions';
 import {
   CellWrapperStyled,
   CheckCompletedStyled,
   CheckWrapperStyled,
   DayWrapperStyled,
   GridWrapperStyled,
+  HolidayStyled,
   RowInCellStyled,
   ShowMoreStyled,
   TaskItemContainerStyled,
@@ -15,6 +16,7 @@ import {
   TaskTextStyled,
   TasksListStyled,
   WeekWrapperStyled,
+  WrapperHolidayStyled,
 } from './CalendarGrid.styled';
 
 interface CalendarGridProps {
@@ -25,6 +27,7 @@ interface CalendarGridProps {
   handleAddNewTaskDoubleClick: (date: Date) => void;
   handleTaskDoubleClick: (task: Task) => void;
   handleUpdateCompletedTask: (task: Task) => void;
+  holidays: PublicHoliday[];
 }
 
 export const CalendarGrid: FC<CalendarGridProps> = ({
@@ -35,6 +38,7 @@ export const CalendarGrid: FC<CalendarGridProps> = ({
   handleAddNewTaskDoubleClick,
   handleTaskDoubleClick,
   handleUpdateCompletedTask,
+  holidays,
 }) => {
   return (
     <GridWrapperStyled>
@@ -47,6 +51,19 @@ export const CalendarGrid: FC<CalendarGridProps> = ({
               $isCurrentMonth={getMonth(day) === month}
             >
               <RowInCellStyled>
+                {holidays
+                  .filter(
+                    holiday =>
+                      format(new Date(holiday.date), 'yyyy-MM-dd') ===
+                      format(day, 'yyyy-MM-dd')
+                  )
+                  .map(holiday => (
+                    <WrapperHolidayStyled key={holiday.name}>
+                      <HolidayStyled data-title={holiday.localName}>
+                        {holiday.localName}
+                      </HolidayStyled>
+                    </WrapperHolidayStyled>
+                  ))}
                 <DayWrapperStyled
                   onDoubleClick={() => handleAddNewTaskDoubleClick(day)}
                   $isToday={day.toDateString() === new Date().toDateString()}
