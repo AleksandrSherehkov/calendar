@@ -16,7 +16,6 @@ import {
   TaskTextStyled,
   TasksListStyled,
   WeekWrapperStyled,
-  WrapperHolidayStyled,
 } from './CalendarGrid.styled';
 
 interface CalendarGridProps {
