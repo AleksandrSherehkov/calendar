@@ -12,7 +12,12 @@ import {
   addDays,
 } from 'date-fns';
 
-import { CalendarWrapperStyled } from './Calendar.styled';
+import {
+  CalendarWrapperStyled,
+  InputFormStyled,
+  SearchIconStyled,
+  WrapperSearchStyled,
+} from './Calendar.styled';
 import {
   addTask,
   deleteTaskById,
@@ -31,6 +36,7 @@ import { TaskForm } from '../../../taskForm/components/TaskForm/TaskForm';
 import { Title } from '../../../../shared/components/Title/Title';
 import { DISPLAY_MODE_DAY, DISPLAY_MODE_MONTH } from '../../heplers/constants';
 import { DayPlans } from '../../../dayPlan/components/DayPlans';
+import { useDebounce } from 'use-debounce';
 
 const monthsInNominativeCase = [
   'Січень',
@@ -87,9 +93,12 @@ export const Calendar: FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task>(initialTaskState);
   const [isEditing, setIsEditing] = useState(true);
-  console.log(`isEditing:`, isEditing);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [displayMode, setDisplayMode] = useState('month');
+  const [filterQuery, setFilterQuery] = useState('');
+  const [debouncedFilterQuery] = useDebounce(filterQuery, 300);
+  console.log(`filterQuery:`, filterQuery);
 
   const year = getYear(selectedDate);
   const month = getMonth(selectedDate);
@@ -108,13 +117,17 @@ export const Calendar: FC = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await getAllTasks({ month: month + 1, year });
+        const response = await getAllTasks({
+          filterQuery,
+          month: month + 1,
+          year,
+        });
         setTasks(response);
       } catch (error) {
         console.error('Failed to fetch tasks', error);
       }
     })();
-  }, [year, month, currentTask]);
+  }, [year, month, currentTask, debouncedFilterQuery]);
 
   useEffect(() => {
     if (displayMode === DISPLAY_MODE_MONTH) {
@@ -253,6 +266,16 @@ export const Calendar: FC = () => {
           displayMode={displayMode}
           setDisplayMode={setDisplayMode}
         />
+        <WrapperSearchStyled>
+          <InputFormStyled
+            type="text"
+            placeholder="Фільтрація"
+            value={filterQuery}
+            onChange={e => setFilterQuery(e.target.value)}
+          />
+          <SearchIconStyled />
+        </WrapperSearchStyled>
+
         {displayMode === DISPLAY_MODE_MONTH ? (
           <>
             <DaysOfWeek />
