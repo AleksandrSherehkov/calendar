@@ -4,16 +4,15 @@ import { Task } from '../../../shared/types/definitions';
 import { format } from 'date-fns';
 import {
   AddIconButton,
+  CheckCompletedStyled,
   ContainerFormStyled,
   ContainerWraperStyled,
   NoTaskStyled,
   TaskItemStyled,
   TaskListWrapper,
-} from './DayPlan';
-import {
-  CheckCompletedStyled,
   TaskTextStyled,
-} from '../../calendar/components/CalendarGrid/CalendarGrid.styled';
+} from './DayPlan';
+import {} from '../../calendar/components/CalendarGrid/CalendarGrid.styled';
 import { TaskForm } from '../../taskForm/components/TaskForm/TaskForm';
 
 interface DayPlansProps {
