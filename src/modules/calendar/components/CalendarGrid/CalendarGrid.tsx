@@ -1,7 +1,5 @@
-import { FC } from 'react';
-
 import useTasksStore from '@/store/zustandStore/useTaskStore';
-import { format, getMonth } from 'date-fns';
+import { format, getMonth, getYear } from 'date-fns';
 
 import {
   CellWrapperStyled,
@@ -18,24 +16,20 @@ import {
   TasksListStyled,
   WeekWrapperStyled,
 } from './CalendarGrid.styled';
+import { generateCalendarGrid } from '../../ultils/generateCalendarGrid ';
 
-interface CalendarGridProps {
-  grid: Date[][];
-
-  month: number;
-}
-
-export const CalendarGrid: FC<CalendarGridProps> = ({
-  grid,
-
-  month,
-}) => {
+export const CalendarGrid = () => {
   const tasks = useTasksStore.use.tasks();
   const holidays = useTasksStore.use.holidays();
   const handleShowMoreClick = useTasksStore.use.showMoreTasks();
   const handleUpdateCompletedTask = useTasksStore.use.updateCompletedTask();
   const handleAddNewTaskDoubleClick = useTasksStore.use.addNewTaskDoubleClick();
   const handleTaskDoubleClick = useTasksStore.use.еditTaskDoubleClick();
+  const selectedDate = useTasksStore.use.selectedDate();
+  const year = getYear(selectedDate);
+  const month = getMonth(selectedDate);
+  const grid = generateCalendarGrid(year, month);
+
   return (
     <GridWrapperStyled>
       {grid.map(week => (

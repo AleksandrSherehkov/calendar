@@ -9,7 +9,7 @@ import {
 } from '../../shared/types/definitions';
 import { createSelectors } from './createSelectors';
 import { addDays, addMonths, addYears, getMonth, getYear } from 'date-fns';
-import { DISPLAY_MODE_DAY } from '@/modules/calendar/heplers/constants';
+import { DISPLAY_MODE_DAY } from '@/modules/calendar/constants/constants';
 
 interface TasksState {
   filterQuery: string;
@@ -39,7 +39,7 @@ interface TasksActions {
   fetchTasks: (params: GetAllQueryParams) => Promise<void>;
   fetchHolidays: (year: number, countryCode: string) => Promise<void>;
   addNewTask: (task: Omit<Task, '_id'>) => Promise<void>;
-  updateTask: (id: string, task: Task) => Promise<void>;
+  updateTask: () => Promise<void>;
   closeModal: () => void;
   deleteTask: (id: string) => Promise<void>;
   updateCompletedTask: (task: Task) => Promise<void>;

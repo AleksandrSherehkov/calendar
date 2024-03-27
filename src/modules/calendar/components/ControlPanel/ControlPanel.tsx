@@ -1,8 +1,7 @@
-import { FC } from 'react';
 import { uk } from 'date-fns/locale';
 import useTasksStore from '@/store/zustandStore/useTaskStore';
 
-import { format } from 'date-fns';
+import { format, getMonth } from 'date-fns';
 import {
   ButtonDayStyled,
   ButtonModeStyled,
@@ -13,13 +12,13 @@ import {
   WraperButtonStyled,
   WrapperDayButtonStyled,
 } from './ControlPanel.styled';
-import { DISPLAY_MODE_DAY, DISPLAY_MODE_MONTH } from '../../heplers/constants';
+import {
+  DISPLAY_MODE_DAY,
+  DISPLAY_MODE_MONTH,
+} from '../../constants/constants';
+import { MONTHS_IN_NOMINATIVE_CASE } from '../../constants/dataConstants';
 
-interface ControlPanelProps {
-  monthName: string;
-}
-
-export const ControlPanel: FC<ControlPanelProps> = ({ monthName }) => {
+export const ControlPanel = () => {
   const displayMode = useTasksStore.use.displayMode();
   const setDisplayMode = useTasksStore.use.setDisplayMode();
   const selectedDate = useTasksStore.use.selectedDate();
@@ -30,6 +29,8 @@ export const ControlPanel: FC<ControlPanelProps> = ({ monthName }) => {
   const previousYear = useTasksStore.use.previousYear();
   const nextYear = useTasksStore.use.nextYear();
   const resetToToday = useTasksStore.use.resetToToday();
+  const month = getMonth(selectedDate);
+  const monthName = MONTHS_IN_NOMINATIVE_CASE[month];
 
   const handleMonthMode = () => {
     resetToToday();
