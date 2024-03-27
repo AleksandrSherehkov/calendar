@@ -1,7 +1,8 @@
 import { FC } from 'react';
 
+import useTasksStore from '@/store/zustandStore/useTaskStore';
 import { format, getMonth } from 'date-fns';
-import { PublicHoliday, Task } from '../../../../shared/types/definitions';
+
 import {
   CellWrapperStyled,
   CheckCompletedStyled,
@@ -20,25 +21,21 @@ import {
 
 interface CalendarGridProps {
   grid: Date[][];
-  tasks: Task[];
+
   month: number;
-  handleShowMoreClick: (date: Date) => void;
-  handleAddNewTaskDoubleClick: (date: Date) => void;
-  handleTaskDoubleClick: (task: Task) => void;
-  handleUpdateCompletedTask: (task: Task) => void;
-  holidays: PublicHoliday[];
 }
 
 export const CalendarGrid: FC<CalendarGridProps> = ({
   grid,
-  tasks,
+
   month,
-  handleShowMoreClick,
-  handleAddNewTaskDoubleClick,
-  handleTaskDoubleClick,
-  handleUpdateCompletedTask,
-  holidays,
 }) => {
+  const tasks = useTasksStore.use.tasks();
+  const holidays = useTasksStore.use.holidays();
+  const handleShowMoreClick = useTasksStore.use.showMoreTasks();
+  const handleUpdateCompletedTask = useTasksStore.use.updateCompletedTask();
+  const handleAddNewTaskDoubleClick = useTasksStore.use.addNewTaskDoubleClick();
+  const handleTaskDoubleClick = useTasksStore.use.еditTaskDoubleClick();
   return (
     <GridWrapperStyled>
       {grid.map(week => (

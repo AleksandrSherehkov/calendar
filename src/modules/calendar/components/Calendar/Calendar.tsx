@@ -1,4 +1,5 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
+import useTasksStore from '@/store/zustandStore/useTaskStore';
 import {
   getMonth,
   getYear,
@@ -7,8 +8,6 @@ import {
   endOfMonth,
   startOfWeek,
   endOfWeek,
-  addMonths,
-  addYears,
   addDays,
 } from 'date-fns';
 
@@ -18,26 +17,18 @@ import {
   SearchIconStyled,
   WrapperSearchStyled,
 } from './Calendar.styled';
-import {
-  addTask,
-  deleteTaskById,
-  getAllTasks,
-  getTaskById,
-  updateTaskById,
-  updateTaskCompleted,
-} from '../../../../services/api/tasksApi';
+
 import Modal from '../../../../shared/components/Modal/Modal';
-import { PublicHoliday, Task } from '../../../../shared/types/definitions';
+import { Task } from '../../../../shared/types/definitions';
 
 import { ControlPanel } from '../ControlPanel/ControlPanel';
 import { DaysOfWeek } from '../DaysOfWeek/DaysOfWeek';
 import { CalendarGrid } from '../CalendarGrid/CalendarGrid';
 import { TaskForm } from '../../../taskForm/components/TaskForm/TaskForm';
 import { Title } from '../../../../shared/components/Title/Title';
-import { DISPLAY_MODE_DAY, DISPLAY_MODE_MONTH } from '../../heplers/constants';
+import { DISPLAY_MODE_MONTH } from '../../heplers/constants';
 import { DayPlans } from '../../../dayPlan/components/DayPlans';
 import { useDebounce } from 'use-debounce';
-import { getPublicHolidays } from '../../../../services/api/nagerDataV3Api';
 
 const monthsInNominativeCase = [
   'Січень',
@@ -83,64 +74,45 @@ const generateCalendarGrid = (year: number, month: number) => {
   return grid;
 };
 
-const initialTaskState: Task = {
-  name: '',
-  description: '',
-  date: new Date().toISOString(),
-};
-
 export const Calendar: FC = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [currentTask, setCurrentTask] = useState<Task>(initialTaskState);
-  const [isEditing, setIsEditing] = useState(true);
+  const fetchTasks = useTasksStore.use.fetchTasks();
+  const deleteTask = useTasksStore.use.deleteTask();
+  const addNewTask = useTasksStore.use.addNewTask();
+  const displayMode = useTasksStore.use.displayMode();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [displayMode, setDisplayMode] = useState('month');
-  const [filterQuery, setFilterQuery] = useState('');
+  const isModalOpen = useTasksStore.use.isModalOpen();
+  const setIsModalOpen = useTasksStore.use.setIsModalOpen();
+  const handleCloseModal = useTasksStore.use.closeModal();
+  const isEditing = useTasksStore.use.isEditing();
+
+  const currentTask = useTasksStore.use.currentTask();
+
+  const setCurrentTask = useTasksStore.use.setCurrentTask();
+  const selectedDate = useTasksStore.use.selectedDate();
+
+  const filterQuery = useTasksStore.use.filterQuery();
+  const setFilterQuery = useTasksStore.use.setFilterQuery();
+  const fetchHolidays = useTasksStore.use.fetchHolidays();
+
+  const handleUpdateTask = useTasksStore.use.updateTask();
+
   const [debouncedFilterQuery] = useDebounce(filterQuery, 300);
-  const [holidays, setHolidays] = useState<PublicHoliday[]>([]);
 
   const year = getYear(selectedDate);
   const month = getMonth(selectedDate);
   const grid = generateCalendarGrid(year, month);
   const monthName = monthsInNominativeCase[month];
 
-  const nextDay = () => setSelectedDate(current => addDays(current, 1));
-  const previousDay = () => setSelectedDate(current => addDays(current, -1));
-  const previousMonth = () =>
-    setSelectedDate(current => addMonths(current, -1));
-  const nextMonth = () => setSelectedDate(current => addMonths(current, 1));
-  const previousYear = () => setSelectedDate(current => addYears(current, -1));
-  const nextYear = () => setSelectedDate(current => addYears(current, 1));
-  const resetToToday = () => setSelectedDate(new Date());
+  useEffect(() => {
+    fetchHolidays(year, 'UA');
+  }, [year, month, fetchHolidays]);
 
   useEffect(() => {
-    const fetchHolidays = async () => {
-      try {
-        const holidays = await getPublicHolidays(year, 'UA');
-        setHolidays(holidays);
-      } catch (error) {
-        console.error('Failed to fetch holidays', error);
-      }
-    };
-
-    fetchHolidays();
-  }, [year, month]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await getAllTasks({
-          filterQuery,
-          month: month + 1,
-          year,
-        });
-        setTasks(response);
-      } catch (error) {
-        console.error('Failed to fetch tasks', error);
-      }
-    })();
+    fetchTasks({
+      filterQuery,
+      month: month + 1,
+      year,
+    });
   }, [year, month, currentTask, debouncedFilterQuery]);
 
   useEffect(() => {
@@ -149,104 +121,23 @@ export const Calendar: FC = () => {
     }
   }, [displayMode]);
 
-  const handleAddNewTaskDoubleClick = (date: Date) => {
-    setCurrentTask({ ...initialTaskState, date: date.toISOString() });
-    setIsEditing(false);
-    setIsModalOpen(true);
-  };
-
-  const addNewTask = async (task: Omit<Task, '_id'>) => {
-    try {
-      const addedTask = await addTask(task);
-      setIsEditing(true);
-      setCurrentTask(addedTask);
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error('Failed to add new task', error);
-    }
-  };
-
-  const handleUpdateTask = async () => {
-    if (currentTask._id) {
-      try {
-        const updatedTask = await updateTaskById(currentTask._id, {
-          name: currentTask.name,
-          description: currentTask.description,
-          date: currentTask.date,
-        });
-        setCurrentTask(updatedTask);
-        setIsModalOpen(false);
-        setCurrentTask(initialTaskState);
-      } catch (error) {
-        console.error('Failed to update task', error);
-      }
-    }
-  };
-
-  const handleUpdateCompletedTask = async (task: Task) => {
-    if (task._id) {
-      try {
-        const updatedTask = await updateTaskCompleted(
-          task._id,
-          !task.completed
-        );
-
-        setCurrentTask(updatedTask);
-      } catch (error) {
-        console.error('Failed to update task completed status', error);
-      }
-    }
-  };
-
-  const deleteTask = async (id: string) => {
-    if (id) {
-      try {
-        await deleteTaskById(id);
-        const updatedTasks = await getAllTasks({ month: month + 1, year });
-        setTasks(updatedTasks);
-        handleCloseModal();
-      } catch (error) {
-        console.error('Failed to delete task', error);
-      }
-    } else {
-      console.error('No task ID provided for deletion');
-    }
-  };
-
-  const handleTaskDoubleClick = async (task: Task) => {
-    try {
-      if (task._id) {
-        const fetchedTask = await getTaskById(task._id);
-        setCurrentTask(fetchedTask);
-        setIsEditing(true);
-        setIsModalOpen(true);
-      } else {
-        throw new Error('Task ID is undefined');
-      }
-    } catch (error) {
-      console.error('Failed to fetch task details', error);
-    }
-  };
-
-  const handleShowMoreClick = (date: Date) => {
-    setSelectedDate(date);
-    setDisplayMode(DISPLAY_MODE_DAY);
-  };
-
-  const handleInputChange = (field: keyof Task, value: string) => {
-    setCurrentTask(prevTask => ({
-      ...prevTask,
+  const handleInputChange = <K extends keyof Task>(
+    field: K,
+    value: Task[K]
+  ) => {
+    setCurrentTask({
+      ...currentTask,
       [field]: value,
-    }));
+    });
   };
 
   const handleFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      if (isEditing && currentTask._id) {
+      if (!isEditing && currentTask._id) {
         await handleUpdateTask();
       } else {
-        await addNewTask({
+        addNewTask({
           name: currentTask.name,
           description: currentTask.description,
           date: currentTask.date,
@@ -257,35 +148,17 @@ export const Calendar: FC = () => {
     }
   };
 
-  const handleCloseModal = () => {
-    setCurrentTask(initialTaskState);
-    setIsEditing(true);
-    setIsModalOpen(false);
-  };
-
   return (
     <>
       <CalendarWrapperStyled>
         <Title text="Календар" />
-        <ControlPanel
-          monthName={monthName}
-          selectedDate={selectedDate}
-          previousDay={previousDay}
-          nextDay={nextDay}
-          previousMonth={previousMonth}
-          nextMonth={nextMonth}
-          previousYear={previousYear}
-          nextYear={nextYear}
-          resetToToday={resetToToday}
-          displayMode={displayMode}
-          setDisplayMode={setDisplayMode}
-        />
+        <ControlPanel monthName={monthName} />
         <WrapperSearchStyled>
           <InputFormStyled
             type="text"
             placeholder="Фільтрація"
             value={filterQuery}
-            onChange={e => setFilterQuery(e.target.value)}
+            onChange={e => setFilterQuery(e.target.value.trim())}
           />
           <SearchIconStyled />
         </WrapperSearchStyled>
@@ -293,43 +166,20 @@ export const Calendar: FC = () => {
         {displayMode === DISPLAY_MODE_MONTH ? (
           <>
             <DaysOfWeek />
-            <CalendarGrid
-              grid={grid}
-              tasks={tasks}
-              handleShowMoreClick={handleShowMoreClick}
-              handleUpdateCompletedTask={handleUpdateCompletedTask}
-              handleAddNewTaskDoubleClick={handleAddNewTaskDoubleClick}
-              handleTaskDoubleClick={handleTaskDoubleClick}
-              month={month}
-              holidays={holidays}
-            />
+            <CalendarGrid grid={grid} month={month} />
           </>
         ) : (
           <DayPlans
-            tasks={tasks}
-            selectedDay={selectedDate}
-            handleAddNewTaskDoubleClick={handleAddNewTaskDoubleClick}
-            handleUpdateCompletedTask={handleUpdateCompletedTask}
-            currentTask={currentTask}
             handleInputChange={handleInputChange}
             handleFormSubmit={handleFormSubmit}
-            handleCloseModal={handleCloseModal}
-            deleteTask={deleteTask}
-            isEditing={isEditing}
-            handleTaskDoubleClick={handleTaskDoubleClick}
-            isOpen={isModalOpen}
           />
         )}
       </CalendarWrapperStyled>
       {isModalOpen && displayMode === DISPLAY_MODE_MONTH && (
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
           <TaskForm
-            currentTask={currentTask}
             handleInputChange={handleInputChange}
             handleFormSubmit={handleFormSubmit}
-            handleCloseModal={handleCloseModal}
-            deleteTask={deleteTask}
-            isEditing={isEditing}
           />
         </Modal>
       )}

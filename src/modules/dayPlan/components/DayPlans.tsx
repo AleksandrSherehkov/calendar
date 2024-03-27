@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import useTasksStore from '@/store/zustandStore/useTaskStore';
 import { Task } from '../../../shared/types/definitions';
 import { format } from 'date-fns';
 import {
@@ -16,34 +17,22 @@ import {
 import { TaskForm } from '../../taskForm/components/TaskForm/TaskForm';
 
 interface DayPlansProps {
-  tasks: Task[];
-  selectedDay: Date;
-  handleAddNewTaskDoubleClick: (date: Date) => void;
-  handleUpdateCompletedTask: (task: Task) => void;
-  currentTask: Task;
   handleInputChange: (field: keyof Task, value: string) => void;
   handleFormSubmit: (event: React.FormEvent) => void;
-  handleCloseModal: () => void;
-  deleteTask: (id: string) => void;
-  isEditing: boolean;
-  handleTaskDoubleClick: (task: Task) => void;
-  isOpen: boolean;
 }
 
 export const DayPlans: FC<DayPlansProps> = ({
-  tasks,
-  selectedDay,
-  handleAddNewTaskDoubleClick,
-  handleTaskDoubleClick,
-  handleUpdateCompletedTask,
-  currentTask,
   handleInputChange,
   handleFormSubmit,
-  handleCloseModal,
-  deleteTask,
-  isEditing,
-  isOpen,
 }) => {
+  const tasks = useTasksStore.use.tasks();
+  const selectedDay = useTasksStore.use.selectedDate();
+  const handleAddNewTaskDoubleClick = useTasksStore.use.addNewTaskDoubleClick();
+  const handleUpdateCompletedTask = useTasksStore.use.updateCompletedTask();
+
+  const handleTaskDoubleClick = useTasksStore.use.еditTaskDoubleClick();
+  const isOpen = useTasksStore.use.isModalOpen();
+
   const tasksForSelectedDay = tasks.filter(
     task =>
       format(new Date(task.date), 'yyyy-MM-dd') ===
@@ -72,12 +61,8 @@ export const DayPlans: FC<DayPlansProps> = ({
       <ContainerFormStyled $isOpen={isOpen}>
         {isOpen ? (
           <TaskForm
-            currentTask={currentTask}
             handleInputChange={handleInputChange}
             handleFormSubmit={handleFormSubmit}
-            handleCloseModal={handleCloseModal}
-            deleteTask={deleteTask}
-            isEditing={isEditing}
           />
         ) : (
           <>

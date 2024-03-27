@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { uk } from 'date-fns/locale';
+import useTasksStore from '@/store/zustandStore/useTaskStore';
 
 import { format } from 'date-fns';
 import {
@@ -16,31 +17,20 @@ import { DISPLAY_MODE_DAY, DISPLAY_MODE_MONTH } from '../../heplers/constants';
 
 interface ControlPanelProps {
   monthName: string;
-  selectedDate: Date;
-  nextDay: () => void;
-  previousDay: () => void;
-  previousMonth: () => void;
-  nextMonth: () => void;
-  previousYear: () => void;
-  nextYear: () => void;
-  resetToToday: () => void;
-  displayMode: string;
-  setDisplayMode: (mode: string) => void;
 }
 
-export const ControlPanel: FC<ControlPanelProps> = ({
-  monthName,
-  selectedDate,
-  nextDay,
-  previousDay,
-  previousMonth,
-  nextMonth,
-  previousYear,
-  nextYear,
-  resetToToday,
-  displayMode,
-  setDisplayMode,
-}) => {
+export const ControlPanel: FC<ControlPanelProps> = ({ monthName }) => {
+  const displayMode = useTasksStore.use.displayMode();
+  const setDisplayMode = useTasksStore.use.setDisplayMode();
+  const selectedDate = useTasksStore.use.selectedDate();
+  const nextDay = useTasksStore.use.nextDay();
+  const previousDay = useTasksStore.use.previousDay();
+  const previousMonth = useTasksStore.use.previousMonth();
+  const nextMonth = useTasksStore.use.nextMonth();
+  const previousYear = useTasksStore.use.previousYear();
+  const nextYear = useTasksStore.use.nextYear();
+  const resetToToday = useTasksStore.use.resetToToday();
+
   const handleMonthMode = () => {
     resetToToday();
     setDisplayMode(DISPLAY_MODE_MONTH);
