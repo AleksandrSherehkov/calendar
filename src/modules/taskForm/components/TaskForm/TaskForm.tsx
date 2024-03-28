@@ -47,8 +47,8 @@ export const TaskForm = () => {
 
     try {
       const validatedTask = taskSchema.parse({
-        name: currentTask.name,
-        description: currentTask.description,
+        name: currentTask.name.trim(),
+        description: currentTask.description.trim(),
       });
 
       if (!isEditing && currentTask._id) {
