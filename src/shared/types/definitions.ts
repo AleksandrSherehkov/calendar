@@ -2,6 +2,9 @@ export interface ErrorResponse {
   message: string;
 }
 
+export interface FormErrors {
+  [key: string]: string;
+}
 export interface Task {
   _id?: string;
   name: string;
@@ -52,6 +55,8 @@ export interface TasksActions {
   addNewTaskDoubleClick: (date: Date) => void;
   еditTaskDoubleClick: (task: Task) => Promise<void>;
   setFilterQuery: (filterQuery: string) => void;
+  setFormErrors: (errors: { [key: string]: string }) => void;
+  clearFormErrors: () => void;
 }
 
 export interface TasksState {
@@ -63,4 +68,5 @@ export interface TasksState {
   isModalOpen: boolean;
   displayMode: 'month' | 'day';
   holidays: PublicHoliday[];
+  formErrors: { [key: string]: string };
 }

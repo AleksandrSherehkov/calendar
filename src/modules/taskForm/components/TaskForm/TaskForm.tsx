@@ -4,6 +4,7 @@ import useTasksStore from '@/store/zustandStore/useTaskStore';
 import { Task } from '../../../../shared/types/definitions';
 import {
   ButtonFormWrapperStyled,
+  ErrorStyled,
   FormStyled,
   InputFormStyled,
   TextAreaStyled,
@@ -24,6 +25,7 @@ export const TaskForm: FC<TaskFormProps> = ({
   const handleCloseModal = useTasksStore.use.closeModal();
   const deleteTask = useTasksStore.use.deleteTask();
   const isEditing = useTasksStore.use.isEditing();
+  const formErrors = useTasksStore.use.formErrors();
 
   return (
     <FormStyled onSubmit={handleFormSubmit}>
@@ -35,6 +37,7 @@ export const TaskForm: FC<TaskFormProps> = ({
         onChange={e => handleInputChange('name', e.target.value.trim())}
         placeholder="Назва"
       />
+      <ErrorStyled>{formErrors?.name && formErrors.name}</ErrorStyled>
       <TextAreaStyled
         name="taskDiscription"
         value={currentTask.description}
@@ -42,6 +45,9 @@ export const TaskForm: FC<TaskFormProps> = ({
         placeholder="Опис"
         rows={6}
       />
+      <ErrorStyled>
+        {formErrors?.description && formErrors.description}
+      </ErrorStyled>
 
       <ButtonFormWrapperStyled>
         <Button onClick={handleCloseModal} text="Cancel" />

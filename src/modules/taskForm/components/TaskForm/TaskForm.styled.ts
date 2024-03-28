@@ -6,14 +6,13 @@ export const FormStyled = styled.form`
   flex-direction: column;
   align-items: center;
   padding: ${props => props.theme.spacing(4)};
-  gap: ${props => props.theme.spacing(2)};
 `;
 
 export const InputFormStyled = styled.input`
   width: 100%;
   padding: 4px 4px;
   border: unset;
-
+  margin-top: ${props => props.theme.spacing(2)};
   background-color: #1e1f21;
   color: #dddddd;
   outline: unset;
@@ -44,4 +43,11 @@ export const ButtonFormWrapperStyled = styled.div`
   align-items: center;
   padding: 8px 14px;
   gap: ${props => props.theme.spacing(5)};
+`;
+
+export const ErrorStyled = styled.p`
+  font-size: ${props => props.theme.fontSizes.xs};
+  color: ${props => props.theme.colors.red};
+  font-style: italic;
+  height: 13px;
 `;

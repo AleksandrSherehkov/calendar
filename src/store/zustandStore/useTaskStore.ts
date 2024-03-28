@@ -22,12 +22,18 @@ const initialState: TasksState = {
   isModalOpen: false,
   displayMode: 'month',
   holidays: [],
+  formErrors: {},
 };
 
 const useTasksStore = create<TasksState & TasksActions>()(
   devtools(
     (set, get) => ({
       ...initialState,
+
+      setFormErrors: (errors: { [key: string]: string }) =>
+        set({ formErrors: errors }),
+
+      clearFormErrors: () => set({ formErrors: {} }),
 
       nextDay: () => {
         const current = get().selectedDate;
@@ -177,6 +183,7 @@ const useTasksStore = create<TasksState & TasksActions>()(
           isEditing: false,
           isModalOpen: false,
         });
+        get().clearFormErrors();
       },
     }),
     { name: 'TasksStore' }

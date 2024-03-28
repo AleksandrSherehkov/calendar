@@ -5,7 +5,7 @@ import { getMonth, getYear } from 'date-fns';
 import { CalendarWrapperStyled } from './Calendar.styled';
 
 import Modal from '../../../../shared/components/Modal/Modal';
-import { Task } from '../../../../shared/types/definitions';
+import { FormErrors, Task } from '../../../../shared/types/definitions';
 
 import { ControlPanel } from '../ControlPanel/ControlPanel';
 import { DaysOfWeek } from '../DaysOfWeek/DaysOfWeek';
@@ -16,8 +16,13 @@ import { DISPLAY_MODE_MONTH } from '../../constants/constants';
 import { DayPlans } from '../../../dayPlan/components/DayPlan/DayPlans';
 import { useDebounce } from 'use-debounce';
 import { SearchFilter } from '../SearchFilter/SearchFilter';
+import { z } from 'zod';
+import { taskSchema } from '@/modules/taskForm/components/TaskForm/taskFormValidation';
 
 export const Calendar: FC = () => {
+  const setFormErrors = useTasksStore.use.setFormErrors();
+  const clearFormErrors = useTasksStore.use.clearFormErrors();
+
   const fetchTasks = useTasksStore.use.fetchTasks();
   const fetchHolidays = useTasksStore.use.fetchHolidays();
   const addNewTask = useTasksStore.use.addNewTask();
@@ -66,18 +71,39 @@ export const Calendar: FC = () => {
 
   const handleFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    clearFormErrors();
+
     try {
+      const validatedTask = taskSchema.parse({
+        name: currentTask.name,
+        description: currentTask.description,
+      });
+
       if (!isEditing && currentTask._id) {
         await handleUpdateTask();
       } else {
         addNewTask({
-          name: currentTask.name,
-          description: currentTask.description,
+          name: validatedTask.name,
+          description: validatedTask.description,
           date: currentTask.date,
         });
       }
     } catch (error) {
-      console.error('Failed to update task', error);
+      if (error instanceof z.ZodError) {
+        const newFormErrors = error.errors.reduce<FormErrors>(
+          (acc, currError) => {
+            if (typeof currError.path[0] === 'string') {
+              acc[currError.path[0]] = currError.message;
+            }
+            return acc;
+          },
+          {}
+        );
+
+        setFormErrors(newFormErrors);
+      } else {
+        console.error('Failed to update task', error);
+      }
     }
   };
 
