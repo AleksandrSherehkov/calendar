@@ -1,20 +1,21 @@
 import { FC, useEffect } from 'react';
-import useTasksStore from '@/store/zustandStore/useTaskStore';
+import { useDebounce } from 'use-debounce';
 import { getMonth, getYear } from 'date-fns';
 
-import { CalendarWrapperStyled } from './Calendar.styled';
+import useTasksStore from '@/store/zustandStore/useTaskStore';
 
-import Modal from '../../../../shared/components/Modal/Modal';
+import Modal from '@/shared/components/Modal/Modal';
+import { Title } from '@/shared/components/Title/Title';
 
 import { ControlPanel } from '../ControlPanel/ControlPanel';
 import { DaysOfWeek } from '../DaysOfWeek/DaysOfWeek';
 import { CalendarGrid } from '../CalendarGrid/CalendarGrid';
 import { TaskForm } from '../../../taskForm/components/TaskForm/TaskForm';
-import { Title } from '../../../../shared/components/Title/Title';
 import { DISPLAY_MODE_MONTH } from '../../constants/constants';
 import { DayPlans } from '../../../dayPlan/components/DayPlan/DayPlans';
-import { useDebounce } from 'use-debounce';
 import { SearchFilter } from '../SearchFilter/SearchFilter';
+
+import { CalendarWrapperStyled } from './Calendar.styled';
 
 export const Calendar: FC = () => {
   const shouldRefetchTasks = useTasksStore.use.shouldRefetchTasks();

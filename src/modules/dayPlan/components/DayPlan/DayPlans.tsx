@@ -1,16 +1,17 @@
+import { format } from 'date-fns';
+
 import useTasksStore from '@/store/zustandStore/useTaskStore';
 
-import { format } from 'date-fns';
+import { TaskForm } from '../../../taskForm/components/TaskForm/TaskForm';
+import { DailyTask } from '../DailyTask/DailyTask';
+
 import {
   AddIconButton,
   ContainerFormStyled,
   ContainerWraperStyled,
   NoTaskStyled,
   TaskListStyled,
-} from './DayPlan';
-import {} from '../../../calendar/components/CalendarGrid/CalendarGrid.styled';
-import { TaskForm } from '../../../taskForm/components/TaskForm/TaskForm';
-import { DailyTask } from '../DailyTask/DailyTask';
+} from './DayPlan.styled';
 
 export const DayPlans = () => {
   const tasks = useTasksStore.use.tasks();

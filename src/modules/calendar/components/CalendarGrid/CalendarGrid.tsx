@@ -1,5 +1,6 @@
-import useTasksStore from '@/store/zustandStore/useTaskStore';
 import { format, getMonth, getYear } from 'date-fns';
+
+import useTasksStore from '@/store/zustandStore/useTaskStore';
 
 import { GridWrapperStyled } from './CalendarGrid.styled';
 import { generateCalendarGrid } from '../../ultils/generateCalendarGrid ';

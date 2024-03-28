@@ -1,7 +1,14 @@
 import React from 'react';
+import { z } from 'zod';
+
 import useTasksStore from '@/store/zustandStore/useTaskStore';
 
-import { FormErrors, Task } from '../../../../shared/types/definitions';
+import { FormErrors, Task } from '@/shared/types/definitions';
+
+import { Title } from '@/shared/components/Title/Title';
+import { Button } from '@/shared/components/Button/Button';
+import { taskSchema } from './taskFormValidation';
+
 import {
   ButtonFormWrapperStyled,
   ErrorStyled,
@@ -9,10 +16,6 @@ import {
   InputFormStyled,
   TextAreaStyled,
 } from './TaskForm.styled';
-import { Title } from '../../../../shared/components/Title/Title';
-import { Button } from '@/shared/components/Button/Button';
-import { taskSchema } from './taskFormValidation';
-import { z } from 'zod';
 
 export const TaskForm = () => {
   const currentTask = useTasksStore.use.currentTask();

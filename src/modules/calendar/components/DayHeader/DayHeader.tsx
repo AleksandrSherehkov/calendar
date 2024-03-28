@@ -1,5 +1,7 @@
-import useTasksStore from '@/store/zustandStore/useTaskStore';
 import { format } from 'date-fns';
+
+import useTasksStore from '@/store/zustandStore/useTaskStore';
+
 import {
   DayWrapperStyled,
   HolidayStyled,

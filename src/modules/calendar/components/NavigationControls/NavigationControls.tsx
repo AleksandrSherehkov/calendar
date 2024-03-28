@@ -1,11 +1,14 @@
+import { uk } from 'date-fns/locale';
+import { format } from 'date-fns';
+
 import useTasksStore from '@/store/zustandStore/useTaskStore';
+
+import { DISPLAY_MODE_DAY } from '../../constants/constants';
+
+import { Button } from '@/shared/components/Button/Button';
 
 import { WraperButtonStyled } from '../ModeToggle/ModeToggle.styled';
 import { WrapperDayButtonStyled } from './NavigationControls.styled';
-import { Button } from '@/shared/components/Button/Button';
-import { format } from 'date-fns';
-import { DISPLAY_MODE_DAY } from '../../constants/constants';
-import { uk } from 'date-fns/locale';
 
 export const NavigationControls = () => {
   const nextDay = useTasksStore.use.nextDay();

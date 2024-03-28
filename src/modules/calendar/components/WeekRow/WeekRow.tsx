@@ -1,7 +1,9 @@
-import { WeeksListStyled } from './WeekRow.styled';
-import { format } from 'date-fns';
 import { FC } from 'react';
+import { format } from 'date-fns';
+
 import { DayCell } from '../DayCell/DayCell';
+
+import { WeeksListStyled } from './WeekRow.styled';
 
 interface WeekRowProps {
   week: Date[];

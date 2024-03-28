@@ -12,3 +12,5 @@ export const MONTHS_IN_NOMINATIVE_CASE = [
   'Листопад',
   'Грудень',
 ];
+
+export const DAYS_OF_WEEK = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'];

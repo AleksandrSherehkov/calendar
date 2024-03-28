@@ -1,12 +1,15 @@
 import { FC } from 'react';
+
 import useTasksStore from '@/store/zustandStore/useTaskStore';
+
+import { Task } from '@/shared/types/definitions';
 
 import {
   CheckCompletedStyled,
   TaskItemStyled,
   TaskTextStyled,
 } from './DailyTask.Styled';
-import { Task } from '@/shared/types/definitions';
+
 interface DailyTask {
   task: Task;
 }

@@ -1,8 +1,11 @@
-import useTasksStore from '@/store/zustandStore/useTaskStore';
-import { ShowMoreStyled, TasksListStyled } from './DayTasks.styled';
-import { format } from 'date-fns';
 import { FC } from 'react';
+import { format } from 'date-fns';
+
+import useTasksStore from '@/store/zustandStore/useTaskStore';
+
 import { TaskCheckboxItem } from '../TaskCheckboxItem/TaskCheckboxItem';
+
+import { ShowMoreStyled, TasksListStyled } from './DayTasks.styled';
 
 interface DayTasksProps {
   day: Date;

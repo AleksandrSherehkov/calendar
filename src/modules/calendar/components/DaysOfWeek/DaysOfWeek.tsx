@@ -1,11 +1,11 @@
-import { DayWeeSellStyled, DayWeekWrapperStyled } from './DaysOfWeek.styled';
+import { DAYS_OF_WEEK } from '../../constants/dataConstants';
 
-const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'];
+import { DayWeeSellStyled, DayWeekWrapperStyled } from './DaysOfWeek.styled';
 
 export const DaysOfWeek = () => {
   return (
     <DayWeekWrapperStyled>
-      {daysOfWeek.map(day => (
+      {DAYS_OF_WEEK.map(day => (
         <DayWeeSellStyled key={day}>{day}</DayWeeSellStyled>
       ))}
     </DayWeekWrapperStyled>

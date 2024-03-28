@@ -1,10 +1,13 @@
-import { Button } from '@/shared/components/Button/Button';
-import { WraperButtonStyled } from './ModeToggle.styled';
 import useTasksStore from '@/store/zustandStore/useTaskStore';
+
+import { Button } from '@/shared/components/Button/Button';
+
 import {
   DISPLAY_MODE_DAY,
   DISPLAY_MODE_MONTH,
 } from '../../constants/constants';
+
+import { WraperButtonStyled } from './ModeToggle.styled';
 
 export const ModeToggle = () => {
   const setDisplayMode = useTasksStore.use.setDisplayMode();
