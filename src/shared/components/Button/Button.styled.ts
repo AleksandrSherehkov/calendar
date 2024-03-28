@@ -23,6 +23,10 @@ export const ButtonStyled = styled.button<ButtonModeProps>`
   border-bottom: ${props => props.theme.borders.normal};
   border-bottom-color: ${props => props.theme.colors.darkGrey};
   transition: all ${props => props.theme.transitions.regular};
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 
   &:hover,
   &:focus {

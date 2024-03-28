@@ -60,6 +60,7 @@ export interface TasksActions {
 }
 
 export interface TasksState {
+  isLoading: boolean;
   shouldRefetchTasks: boolean;
   filterQuery: string;
   selectedDate: Date;

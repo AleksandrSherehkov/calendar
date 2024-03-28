@@ -14,6 +14,7 @@ const initialTaskState: Task = {
 };
 
 const initialState: TasksState = {
+  isLoading: false,
   filterQuery: '',
   selectedDate: new Date(),
   isEditing: false,
@@ -97,6 +98,7 @@ const useTasksStore = create<TasksState & TasksActions>()(
         }
       },
       addNewTask: async (task: Omit<Task, '_id'>) => {
+        set({ isLoading: true });
         try {
           const addedTask = await tasksApi.addTask(task);
           set({
@@ -107,10 +109,13 @@ const useTasksStore = create<TasksState & TasksActions>()(
           });
         } catch (error) {
           console.error('Failed to add new task', error);
+        } finally {
+          set({ isLoading: false });
         }
       },
 
       deleteTask: async (id: string) => {
+        set({ isLoading: true });
         try {
           await tasksApi.deleteTaskById(id);
           const updatedTasks = await tasksApi.getAllTasks({
@@ -126,11 +131,14 @@ const useTasksStore = create<TasksState & TasksActions>()(
           });
         } catch (error) {
           console.error('Failed to delete task', error);
+        } finally {
+          set({ isLoading: false });
         }
       },
       updateTask: async () => {
         const { currentTask } = get();
         if (currentTask._id) {
+          set({ isLoading: true });
           try {
             const updatedTask = await tasksApi.updateTaskById(currentTask._id, {
               name: currentTask.name,
@@ -146,10 +154,13 @@ const useTasksStore = create<TasksState & TasksActions>()(
             set({ currentTask: initialTaskState });
           } catch (error) {
             console.error('Failed to update task', error);
+          } finally {
+            set({ isLoading: false });
           }
         }
       },
       updateCompletedTask: async (task: Task) => {
+        set({ isLoading: true });
         if (task._id) {
           try {
             const updatedTask = await tasksApi.updateTaskCompleted(
@@ -163,10 +174,13 @@ const useTasksStore = create<TasksState & TasksActions>()(
             });
           } catch (error) {
             console.error('Failed to update task completed status', error);
+          } finally {
+            set({ isLoading: false });
           }
         }
       },
       еditTaskDoubleClick: async (task: Task) => {
+        set({ isLoading: true });
         try {
           if (task._id) {
             const fetchedTask = await tasksApi.getTaskById(task._id);
@@ -180,6 +194,8 @@ const useTasksStore = create<TasksState & TasksActions>()(
           }
         } catch (error) {
           console.error('Failed to fetch task details', error);
+        } finally {
+          set({ isLoading: false });
         }
       },
       fetchHolidays: async (year, countryCode) => {

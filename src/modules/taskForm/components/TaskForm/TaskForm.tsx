@@ -18,6 +18,8 @@ import {
 } from './TaskForm.styled';
 
 export const TaskForm = () => {
+  const isLoading = useTasksStore.use.isLoading();
+  console.log(`isLoading:`, isLoading);
   const currentTask = useTasksStore.use.currentTask();
   const handleCloseModal = useTasksStore.use.closeModal();
   const deleteTask = useTasksStore.use.deleteTask();
@@ -101,12 +103,17 @@ export const TaskForm = () => {
 
       <ButtonFormWrapperStyled>
         <Button onClick={handleCloseModal} text="Cancel" />
-        <Button type="submit" text={!isEditing ? 'Edit' : 'Add'} />
+        <Button
+          type="submit"
+          text={!isEditing ? 'Edit' : 'Add'}
+          disabled={isLoading}
+        />
 
         {!isEditing && currentTask._id && (
           <Button
             onClick={() => currentTask._id && deleteTask(currentTask._id)}
             text="Delete"
+            disabled={isLoading}
           />
         )}
       </ButtonFormWrapperStyled>
