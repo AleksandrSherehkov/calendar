@@ -6,10 +6,11 @@ import { TaskForm } from '../../../taskForm/components/TaskForm/TaskForm';
 import { DailyTask } from '../DailyTask/DailyTask';
 
 import {
-  Draggable,
+  DropResult,
   DragDropContext,
   Droppable,
-  DropResult,
+  Draggable,
+  DroppableProvided,
 } from 'react-beautiful-dnd';
 import {
   AddIconButton,
@@ -44,7 +45,7 @@ export const DayPlans = () => {
     <ContainerWraperStyled>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="tasks">
-          {provided => (
+          {(provided: DroppableProvided) => (
             <TaskListStyled
               {...provided.droppableProps}
               ref={provided.innerRef}
@@ -52,7 +53,7 @@ export const DayPlans = () => {
               {tasksForSelectedDay.map((task, index) => (
                 <Draggable
                   key={task._id}
-                  draggableId={task._id || 'fallback-id-' + index}
+                  draggableId={task._id ?? 'fallback-id-' + index}
                   index={index}
                 >
                   {provided => (
