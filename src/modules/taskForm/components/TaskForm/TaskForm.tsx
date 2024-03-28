@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import React from 'react';
 import useTasksStore from '@/store/zustandStore/useTaskStore';
 
-import { Task } from '../../../../shared/types/definitions';
+import { FormErrors, Task } from '../../../../shared/types/definitions';
 import {
   ButtonFormWrapperStyled,
   ErrorStyled,
@@ -11,21 +11,68 @@ import {
 } from './TaskForm.styled';
 import { Title } from '../../../../shared/components/Title/Title';
 import { Button } from '@/shared/components/Button/Button';
+import { taskSchema } from './taskFormValidation';
+import { z } from 'zod';
 
-interface TaskFormProps {
-  handleInputChange: (field: keyof Task, value: string) => void;
-  handleFormSubmit: (event: React.FormEvent) => void;
-}
-
-export const TaskForm: FC<TaskFormProps> = ({
-  handleInputChange,
-  handleFormSubmit,
-}) => {
+export const TaskForm = () => {
   const currentTask = useTasksStore.use.currentTask();
   const handleCloseModal = useTasksStore.use.closeModal();
   const deleteTask = useTasksStore.use.deleteTask();
   const isEditing = useTasksStore.use.isEditing();
   const formErrors = useTasksStore.use.formErrors();
+  const setFormErrors = useTasksStore.use.setFormErrors();
+  const clearFormErrors = useTasksStore.use.clearFormErrors();
+  const addNewTask = useTasksStore.use.addNewTask();
+  const handleUpdateTask = useTasksStore.use.updateTask();
+  const setCurrentTask = useTasksStore.use.setCurrentTask();
+
+  const handleInputChange = <K extends keyof Task>(
+    field: K,
+    value: Task[K]
+  ) => {
+    setCurrentTask({
+      ...currentTask,
+      [field]: value,
+    });
+  };
+
+  const handleFormSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    clearFormErrors();
+
+    try {
+      const validatedTask = taskSchema.parse({
+        name: currentTask.name,
+        description: currentTask.description,
+      });
+
+      if (!isEditing && currentTask._id) {
+        await handleUpdateTask();
+      } else {
+        addNewTask({
+          name: validatedTask.name,
+          description: validatedTask.description,
+          date: currentTask.date,
+        });
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newFormErrors = error.errors.reduce<FormErrors>(
+          (acc, currError) => {
+            if (typeof currError.path[0] === 'string') {
+              acc[currError.path[0]] = currError.message;
+            }
+            return acc;
+          },
+          {}
+        );
+
+        setFormErrors(newFormErrors);
+      } else {
+        console.error('Failed to update task', error);
+      }
+    }
+  };
 
   return (
     <FormStyled onSubmit={handleFormSubmit}>

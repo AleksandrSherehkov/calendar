@@ -5,7 +5,6 @@ import { getMonth, getYear } from 'date-fns';
 import { CalendarWrapperStyled } from './Calendar.styled';
 
 import Modal from '../../../../shared/components/Modal/Modal';
-import { FormErrors, Task } from '../../../../shared/types/definitions';
 
 import { ControlPanel } from '../ControlPanel/ControlPanel';
 import { DaysOfWeek } from '../DaysOfWeek/DaysOfWeek';
@@ -16,24 +15,16 @@ import { DISPLAY_MODE_MONTH } from '../../constants/constants';
 import { DayPlans } from '../../../dayPlan/components/DayPlan/DayPlans';
 import { useDebounce } from 'use-debounce';
 import { SearchFilter } from '../SearchFilter/SearchFilter';
-import { z } from 'zod';
-import { taskSchema } from '@/modules/taskForm/components/TaskForm/taskFormValidation';
 
 export const Calendar: FC = () => {
   const shouldRefetchTasks = useTasksStore.use.shouldRefetchTasks();
-  console.log(`shouldRefetchTasks:`, shouldRefetchTasks);
-  const setFormErrors = useTasksStore.use.setFormErrors();
-  const clearFormErrors = useTasksStore.use.clearFormErrors();
 
   const fetchTasks = useTasksStore.use.fetchTasks();
   const fetchHolidays = useTasksStore.use.fetchHolidays();
-  const addNewTask = useTasksStore.use.addNewTask();
-  const handleUpdateTask = useTasksStore.use.updateTask();
+
   const setIsModalOpen = useTasksStore.use.setIsModalOpen();
   const handleCloseModal = useTasksStore.use.closeModal();
-  const setCurrentTask = useTasksStore.use.setCurrentTask();
-  const isEditing = useTasksStore.use.isEditing();
-  const currentTask = useTasksStore.use.currentTask();
+
   const isModalOpen = useTasksStore.use.isModalOpen();
   const displayMode = useTasksStore.use.displayMode();
   const selectedDate = useTasksStore.use.selectedDate();
@@ -61,54 +52,6 @@ export const Calendar: FC = () => {
     }
   }, [displayMode, setIsModalOpen]);
 
-  const handleInputChange = <K extends keyof Task>(
-    field: K,
-    value: Task[K]
-  ) => {
-    setCurrentTask({
-      ...currentTask,
-      [field]: value,
-    });
-  };
-
-  const handleFormSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    clearFormErrors();
-
-    try {
-      const validatedTask = taskSchema.parse({
-        name: currentTask.name,
-        description: currentTask.description,
-      });
-
-      if (!isEditing && currentTask._id) {
-        await handleUpdateTask();
-      } else {
-        addNewTask({
-          name: validatedTask.name,
-          description: validatedTask.description,
-          date: currentTask.date,
-        });
-      }
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const newFormErrors = error.errors.reduce<FormErrors>(
-          (acc, currError) => {
-            if (typeof currError.path[0] === 'string') {
-              acc[currError.path[0]] = currError.message;
-            }
-            return acc;
-          },
-          {}
-        );
-
-        setFormErrors(newFormErrors);
-      } else {
-        console.error('Failed to update task', error);
-      }
-    }
-  };
-
   return (
     <>
       <CalendarWrapperStyled>
@@ -121,18 +64,12 @@ export const Calendar: FC = () => {
             <CalendarGrid />
           </>
         ) : (
-          <DayPlans
-            handleInputChange={handleInputChange}
-            handleFormSubmit={handleFormSubmit}
-          />
+          <DayPlans />
         )}
       </CalendarWrapperStyled>
       {isModalOpen && displayMode === DISPLAY_MODE_MONTH && (
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-          <TaskForm
-            handleInputChange={handleInputChange}
-            handleFormSubmit={handleFormSubmit}
-          />
+          <TaskForm />
         </Modal>
       )}
     </>
