@@ -13,7 +13,6 @@ interface DayTasksProps {
 
 export const DayTasks: FC<DayTasksProps> = ({ day }) => {
   const tasks = useTasksStore.use.tasks();
-
   const handleShowMoreClick = useTasksStore.use.showMoreTasks();
 
   return (

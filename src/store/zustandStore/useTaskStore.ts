@@ -211,6 +211,18 @@ const useTasksStore = create<TasksState & TasksActions>()(
         });
         get().clearFormErrors();
       },
+      updateTasksOrder: (sourceIndex, destinationIndex) => {
+        set(state => {
+          const newTasks = Array.from(state.tasks);
+          const [removed] = newTasks.splice(sourceIndex, 1);
+          newTasks.splice(destinationIndex, 0, removed);
+
+          return {
+            ...state,
+            tasks: newTasks,
+          };
+        });
+      },
     }),
     { name: 'TasksStore' }
   )

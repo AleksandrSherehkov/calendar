@@ -5,6 +5,7 @@ import useTasksStore from '@/store/zustandStore/useTaskStore';
 import { TaskForm } from '../../../taskForm/components/TaskForm/TaskForm';
 import { DailyTask } from '../DailyTask/DailyTask';
 
+import { Draggable, DragDropContext, Droppable } from 'react-beautiful-dnd';
 import {
   AddIconButton,
   ContainerFormStyled,
@@ -14,7 +15,9 @@ import {
 } from './DayPlan.styled';
 
 export const DayPlans = () => {
+  const updateTasksOrder = useTasksStore.use.updateTasksOrder();
   const tasks = useTasksStore.use.tasks();
+
   const selectedDay = useTasksStore.use.selectedDate();
   const handleAddNewTaskDoubleClick = useTasksStore.use.addNewTaskDoubleClick();
 
@@ -25,14 +28,40 @@ export const DayPlans = () => {
       format(new Date(task.date), 'yyyy-MM-dd') ===
       format(selectedDay, 'yyyy-MM-dd')
   );
+  console.log(`tasksForSelectedDay:`, tasksForSelectedDay);
+
+  const onDragEnd = result => {
+    if (!result.destination) return;
+    updateTasksOrder(result.source.index, result.destination.index);
+  };
 
   return (
     <ContainerWraperStyled>
-      <TaskListStyled>
-        {tasksForSelectedDay.map(task => (
-          <DailyTask key={task._id} task={task} />
-        ))}
-      </TaskListStyled>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="tasks">
+          {provided => (
+            <TaskListStyled
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {tasksForSelectedDay.map((task, index) => (
+                <Draggable key={task._id} draggableId={task._id} index={index}>
+                  {provided => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <DailyTask task={task} />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </TaskListStyled>
+          )}
+        </Droppable>
+      </DragDropContext>
       <ContainerFormStyled $isOpen={isOpen}>
         {isOpen ? (
           <TaskForm />
