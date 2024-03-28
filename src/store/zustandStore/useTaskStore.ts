@@ -23,6 +23,7 @@ const initialState: TasksState = {
   displayMode: 'month',
   holidays: [],
   formErrors: {},
+  shouldRefetchTasks: false,
 };
 
 const useTasksStore = create<TasksState & TasksActions>()(
@@ -87,7 +88,10 @@ const useTasksStore = create<TasksState & TasksActions>()(
       fetchTasks: async params => {
         try {
           const tasks = await tasksApi.getAllTasks(params);
-          set({ tasks });
+          set({
+            tasks,
+            shouldRefetchTasks: false,
+          });
         } catch (error) {
           console.error('Failed to fetch tasks', error);
         }
@@ -99,6 +103,7 @@ const useTasksStore = create<TasksState & TasksActions>()(
             isEditing: false,
             currentTask: addedTask,
             isModalOpen: false,
+            shouldRefetchTasks: true,
           });
         } catch (error) {
           console.error('Failed to add new task', error);
@@ -117,6 +122,7 @@ const useTasksStore = create<TasksState & TasksActions>()(
             currentTask: initialTaskState,
             isModalOpen: false,
             isEditing: true,
+            shouldRefetchTasks: true,
           });
         } catch (error) {
           console.error('Failed to delete task', error);
@@ -135,6 +141,7 @@ const useTasksStore = create<TasksState & TasksActions>()(
               currentTask: updatedTask,
               isModalOpen: false,
               isEditing: false,
+              shouldRefetchTasks: true,
             });
             set({ currentTask: initialTaskState });
           } catch (error) {
@@ -150,7 +157,10 @@ const useTasksStore = create<TasksState & TasksActions>()(
               !task.completed
             );
 
-            set({ currentTask: updatedTask });
+            set({
+              currentTask: updatedTask,
+              shouldRefetchTasks: true,
+            });
           } catch (error) {
             console.error('Failed to update task completed status', error);
           }

@@ -60,6 +60,7 @@ export interface TasksActions {
 }
 
 export interface TasksState {
+  shouldRefetchTasks: boolean;
   filterQuery: string;
   selectedDate: Date;
   isEditing: boolean;

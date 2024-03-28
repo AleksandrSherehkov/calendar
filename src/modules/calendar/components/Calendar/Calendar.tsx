@@ -20,6 +20,8 @@ import { z } from 'zod';
 import { taskSchema } from '@/modules/taskForm/components/TaskForm/taskFormValidation';
 
 export const Calendar: FC = () => {
+  const shouldRefetchTasks = useTasksStore.use.shouldRefetchTasks();
+  console.log(`shouldRefetchTasks:`, shouldRefetchTasks);
   const setFormErrors = useTasksStore.use.setFormErrors();
   const clearFormErrors = useTasksStore.use.clearFormErrors();
 
@@ -51,13 +53,13 @@ export const Calendar: FC = () => {
       month: month + 1,
       year,
     });
-  }, [year, month, currentTask, debouncedFilterQuery]);
+  }, [year, month, shouldRefetchTasks, debouncedFilterQuery, fetchTasks]);
 
   useEffect(() => {
     if (displayMode === DISPLAY_MODE_MONTH) {
       setIsModalOpen(false);
     }
-  }, [displayMode]);
+  }, [displayMode, setIsModalOpen]);
 
   const handleInputChange = <K extends keyof Task>(
     field: K,
