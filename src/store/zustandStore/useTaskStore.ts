@@ -2,51 +2,10 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import * as tasksApi from '../../services/api/tasksApi';
 import * as holidaysApi from '../../services/api/nagerDataV3Api';
-import {
-  GetAllQueryParams,
-  PublicHoliday,
-  Task,
-} from '../../shared/types/definitions';
+import { Task, TasksActions, TasksState } from '../../shared/types/definitions';
 import { createSelectors } from './createSelectors';
 import { addDays, addMonths, addYears, getMonth, getYear } from 'date-fns';
 import { DISPLAY_MODE_DAY } from '@/modules/calendar/constants/constants';
-
-interface TasksState {
-  filterQuery: string;
-  selectedDate: Date;
-  isEditing: boolean;
-  tasks: Task[];
-  currentTask: Task;
-  isModalOpen: boolean;
-  displayMode: 'month' | 'day';
-  holidays: PublicHoliday[];
-}
-
-interface TasksActions {
-  nextDay: () => void;
-  previousDay: () => void;
-  nextMonth: () => void;
-  previousMonth: () => void;
-  nextYear: () => void;
-  previousYear: () => void;
-  resetToToday: () => void;
-  setSelectedDate: (date: Date) => void;
-  setIsEditing: (isEditing: boolean) => void;
-  setIsModalOpen: (isOpen: boolean) => void;
-  setDisplayMode: (mode: 'month' | 'day') => void;
-  setCurrentTask: (task: Task) => void;
-  showMoreTasks: (date: Date) => void;
-  fetchTasks: (params: GetAllQueryParams) => Promise<void>;
-  fetchHolidays: (year: number, countryCode: string) => Promise<void>;
-  addNewTask: (task: Omit<Task, '_id'>) => Promise<void>;
-  updateTask: () => Promise<void>;
-  closeModal: () => void;
-  deleteTask: (id: string) => Promise<void>;
-  updateCompletedTask: (task: Task) => Promise<void>;
-  addNewTaskDoubleClick: (date: Date) => void;
-  еditTaskDoubleClick: (task: Task) => Promise<void>;
-  setFilterQuery: (filterQuery: string) => void;
-}
 
 const initialTaskState: Task = {
   name: '',
@@ -110,6 +69,15 @@ const useTasksStore = create<TasksState & TasksActions>()(
           displayMode: DISPLAY_MODE_DAY,
         });
       },
+
+      addNewTaskDoubleClick: (date: Date) => {
+        set({
+          currentTask: { ...initialTaskState, date: date.toISOString() },
+          isEditing: true,
+          isModalOpen: true,
+        });
+      },
+
       fetchTasks: async params => {
         try {
           const tasks = await tasksApi.getAllTasks(params);
@@ -148,24 +116,6 @@ const useTasksStore = create<TasksState & TasksActions>()(
           console.error('Failed to delete task', error);
         }
       },
-      updateCompletedTask: async (task: Task) => {
-        if (task._id) {
-          try {
-            const updatedTask = await tasksApi.updateTaskCompleted(
-              task._id,
-              !task.completed
-            );
-
-            set({ currentTask: updatedTask });
-          } catch (error) {
-            console.error('Failed to update task completed status', error);
-          }
-        }
-      },
-      fetchHolidays: async (year, countryCode) => {
-        const holidays = await holidaysApi.getPublicHolidays(year, countryCode);
-        set({ holidays });
-      },
       updateTask: async () => {
         const { currentTask } = get();
         if (currentTask._id) {
@@ -186,12 +136,19 @@ const useTasksStore = create<TasksState & TasksActions>()(
           }
         }
       },
-      addNewTaskDoubleClick: (date: Date) => {
-        set({
-          currentTask: { ...initialTaskState, date: date.toISOString() },
-          isEditing: true,
-          isModalOpen: true,
-        });
+      updateCompletedTask: async (task: Task) => {
+        if (task._id) {
+          try {
+            const updatedTask = await tasksApi.updateTaskCompleted(
+              task._id,
+              !task.completed
+            );
+
+            set({ currentTask: updatedTask });
+          } catch (error) {
+            console.error('Failed to update task completed status', error);
+          }
+        }
       },
       еditTaskDoubleClick: async (task: Task) => {
         try {
@@ -209,6 +166,11 @@ const useTasksStore = create<TasksState & TasksActions>()(
           console.error('Failed to fetch task details', error);
         }
       },
+      fetchHolidays: async (year, countryCode) => {
+        const holidays = await holidaysApi.getPublicHolidays(year, countryCode);
+        set({ holidays });
+      },
+
       closeModal: () => {
         set({
           currentTask: initialTaskState,

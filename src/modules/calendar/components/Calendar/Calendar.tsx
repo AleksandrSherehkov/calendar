@@ -13,7 +13,7 @@ import { CalendarGrid } from '../CalendarGrid/CalendarGrid';
 import { TaskForm } from '../../../taskForm/components/TaskForm/TaskForm';
 import { Title } from '../../../../shared/components/Title/Title';
 import { DISPLAY_MODE_MONTH } from '../../constants/constants';
-import { DayPlans } from '../../../dayPlan/components/DayPlans';
+import { DayPlans } from '../../../dayPlan/components/DayPlan/DayPlans';
 import { useDebounce } from 'use-debounce';
 import { SearchFilter } from '../SearchFilter/SearchFilter';
 

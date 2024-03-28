@@ -3,13 +3,13 @@ import useTasksStore from '@/store/zustandStore/useTaskStore';
 
 import { Task } from '../../../../shared/types/definitions';
 import {
-  ButtonFormStyled,
   ButtonFormWrapperStyled,
   FormStyled,
   InputFormStyled,
   TextAreaStyled,
 } from './TaskForm.styled';
 import { Title } from '../../../../shared/components/Title/Title';
+import { Button } from '@/shared/components/Button/Button';
 
 interface TaskFormProps {
   handleInputChange: (field: keyof Task, value: string) => void;
@@ -44,19 +44,14 @@ export const TaskForm: FC<TaskFormProps> = ({
       />
 
       <ButtonFormWrapperStyled>
-        <ButtonFormStyled type="button" onClick={handleCloseModal}>
-          Cancel
-        </ButtonFormStyled>
-        <ButtonFormStyled type="submit">
-          {!isEditing ? 'Edit' : 'Add'}
-        </ButtonFormStyled>
+        <Button onClick={handleCloseModal} text="Cancel" />
+        <Button type="submit" text={!isEditing ? 'Edit' : 'Add'} />
+
         {!isEditing && currentTask._id && (
-          <ButtonFormStyled
-            type="button"
+          <Button
             onClick={() => currentTask._id && deleteTask(currentTask._id)}
-          >
-            Delete
-          </ButtonFormStyled>
+            text="Delete"
+          />
         )}
       </ButtonFormWrapperStyled>
     </FormStyled>

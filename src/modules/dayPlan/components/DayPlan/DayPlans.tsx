@@ -1,19 +1,17 @@
 import { FC } from 'react';
 import useTasksStore from '@/store/zustandStore/useTaskStore';
-import { Task } from '../../../shared/types/definitions';
+import { Task } from '../../../../shared/types/definitions';
 import { format } from 'date-fns';
 import {
   AddIconButton,
-  CheckCompletedStyled,
   ContainerFormStyled,
   ContainerWraperStyled,
   NoTaskStyled,
-  TaskItemStyled,
-  TaskListWrapper,
-  TaskTextStyled,
+  TaskListStyled,
 } from './DayPlan';
-import {} from '../../calendar/components/CalendarGrid/CalendarGrid.styled';
-import { TaskForm } from '../../taskForm/components/TaskForm/TaskForm';
+import {} from '../../../calendar/components/CalendarGrid/CalendarGrid.styled';
+import { TaskForm } from '../../../taskForm/components/TaskForm/TaskForm';
+import { DailyTask } from '../DailyTask/DailyTask';
 
 interface DayPlansProps {
   handleInputChange: (field: keyof Task, value: string) => void;
@@ -27,9 +25,7 @@ export const DayPlans: FC<DayPlansProps> = ({
   const tasks = useTasksStore.use.tasks();
   const selectedDay = useTasksStore.use.selectedDate();
   const handleAddNewTaskDoubleClick = useTasksStore.use.addNewTaskDoubleClick();
-  const handleUpdateCompletedTask = useTasksStore.use.updateCompletedTask();
 
-  const handleTaskDoubleClick = useTasksStore.use.еditTaskDoubleClick();
   const isOpen = useTasksStore.use.isModalOpen();
 
   const tasksForSelectedDay = tasks.filter(
@@ -40,23 +36,11 @@ export const DayPlans: FC<DayPlansProps> = ({
 
   return (
     <ContainerWraperStyled>
-      <TaskListWrapper>
+      <TaskListStyled>
         {tasksForSelectedDay.map(task => (
-          <TaskItemStyled key={task._id}>
-            <CheckCompletedStyled
-              onClick={() => handleUpdateCompletedTask(task)}
-              $isCompleted={task.completed}
-            />
-            <TaskTextStyled
-              data-tooltip="Подвійний клік щоб редагувати, або видалити"
-              $isCompleted={task.completed}
-              onClick={() => handleTaskDoubleClick(task)}
-            >
-              {task.name}
-            </TaskTextStyled>
-          </TaskItemStyled>
+          <DailyTask key={task._id} task={task} />
         ))}
-      </TaskListWrapper>
+      </TaskListStyled>
       <ContainerFormStyled $isOpen={isOpen}>
         {isOpen ? (
           <TaskForm

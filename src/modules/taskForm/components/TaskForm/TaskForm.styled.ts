@@ -45,39 +45,3 @@ export const ButtonFormWrapperStyled = styled.div`
   padding: 8px 14px;
   gap: ${props => props.theme.spacing(5)};
 `;
-
-export const ButtonFormStyled = styled.button`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: unset;
-  border-radius: ${props => props.theme.radii.xxs};
-  background-color: ${props => props.theme.colors.granite};
-
-  padding: 2px 8px;
-
-  color: ${props => props.theme.colors.darkWhite};
-  border-top: ${props => props.theme.borders.normal};
-  border-top-color: ${props => props.theme.colors.grey};
-  border-left: ${props => props.theme.borders.normal};
-  border-left-color: ${props => props.theme.colors.darkGrey};
-  border-right: ${props => props.theme.borders.normal};
-  border-right-color: ${props => props.theme.colors.darkGrey};
-  border-bottom: ${props => props.theme.borders.normal};
-  border-bottom-color: ${props => props.theme.colors.darkGrey};
-  transition: all ${props => props.theme.transitions.regular};
-
-  &:hover,
-  &:focus {
-    background-color: ${props => props.theme.colors.darkGrey};
-    color: ${props => props.theme.colors.lightGrey};
-    transform: translateY(-1px);
-    box-shadow: ${props => props.theme.shadows.primary};
-  }
-
-  &:focus {
-    outline: none;
-    border: ${props => props.theme.borders.normal};
-    border-color: ${props => props.theme.colors.lightGrey};
-  }
-`;
