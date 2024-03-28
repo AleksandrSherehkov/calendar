@@ -57,6 +57,7 @@ export interface TasksActions {
   setFilterQuery: (filterQuery: string) => void;
   setFormErrors: (errors: { [key: string]: string }) => void;
   clearFormErrors: () => void;
+  updateTasksOrder: (sourceIndex: number, destinationIndex: number) => void;
 }
 
 export interface TasksState {

@@ -42,10 +42,11 @@ export const CheckCompletedStyled = styled(
 
 export const TaskItemStyled = styled('li')`
   display: flex;
+
   justify-content: center;
   align-items: center;
   gap: ${props => props.theme.spacing(1)};
-  width: 100%;
+  width: 900px;
 `;
 
 export const TaskTextStyled = styled.p<CheckCompletedStyledProps>`

@@ -7,6 +7,7 @@ import {
 } from '../../shared/types/definitions';
 
 const instance = axios.create({
+  // baseURL: 'http://localhost:3000/api/tasks',
   baseURL: 'https://calendar-backend-dtsk.onrender.com/api/tasks',
 });
 

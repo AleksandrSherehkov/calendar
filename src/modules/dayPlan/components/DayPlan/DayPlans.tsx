@@ -5,14 +5,19 @@ import useTasksStore from '@/store/zustandStore/useTaskStore';
 import { TaskForm } from '../../../taskForm/components/TaskForm/TaskForm';
 import { DailyTask } from '../DailyTask/DailyTask';
 
-import { Draggable, DragDropContext, Droppable } from 'react-beautiful-dnd';
+import {
+  Draggable,
+  DragDropContext,
+  Droppable,
+  DropResult,
+} from 'react-beautiful-dnd';
 import {
   AddIconButton,
   ContainerFormStyled,
   ContainerWraperStyled,
   NoTaskStyled,
   TaskListStyled,
-} from './DayPlan.styled';
+} from './DayPlans.styled';
 
 export const DayPlans = () => {
   const updateTasksOrder = useTasksStore.use.updateTasksOrder();
@@ -28,9 +33,9 @@ export const DayPlans = () => {
       format(new Date(task.date), 'yyyy-MM-dd') ===
       format(selectedDay, 'yyyy-MM-dd')
   );
-  console.log(`tasksForSelectedDay:`, tasksForSelectedDay);
 
-  const onDragEnd = result => {
+  const onDragEnd = (result: DropResult) => {
+    console.log(`result:`, result);
     if (!result.destination) return;
     updateTasksOrder(result.source.index, result.destination.index);
   };
@@ -45,7 +50,11 @@ export const DayPlans = () => {
               ref={provided.innerRef}
             >
               {tasksForSelectedDay.map((task, index) => (
-                <Draggable key={task._id} draggableId={task._id} index={index}>
+                <Draggable
+                  key={task._id}
+                  draggableId={task._id || 'fallback-id-' + index}
+                  index={index}
+                >
                   {provided => (
                     <div
                       ref={provided.innerRef}

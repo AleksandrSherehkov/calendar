@@ -99,6 +99,8 @@ const useTasksStore = create<TasksState & TasksActions>()(
       },
       addNewTask: async (task: Omit<Task, '_id'>) => {
         set({ isLoading: true });
+        const taskDate = new Date(task.date);
+        taskDate.setHours(0, 0, 0, 0);
         try {
           const addedTask = await tasksApi.addTask(task);
           set({

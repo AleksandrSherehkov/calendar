@@ -22,12 +22,12 @@ export const HolidayStyled = styled.p`
   cursor: pointer;
   font-size: ${props => props.theme.fontSizes.xs};
 
-  &:hover::after {
+  &:hover::before {
     content: attr(data-title);
     position: absolute;
     width: max-content;
     bottom: 100%;
-    left: 0;
+    right: 40%;
     transform: translateX(-50%);
     padding: 4px 8px;
     background: ${props => props.theme.colors.red};
