@@ -23,6 +23,7 @@ import {
 export const DayPlans = () => {
   const updateTasksOrder = useTasksStore.use.updateTasksOrder();
   const tasks = useTasksStore.use.tasks();
+  console.log(`tasks:`, tasks);
 
   const selectedDay = useTasksStore.use.selectedDate();
   const handleAddNewTaskDoubleClick = useTasksStore.use.addNewTaskDoubleClick();
