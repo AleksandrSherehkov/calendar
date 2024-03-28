@@ -19,7 +19,7 @@ import {
 
 export const TaskForm = () => {
   const isLoading = useTasksStore.use.isLoading();
-  console.log(`isLoading:`, isLoading);
+
   const currentTask = useTasksStore.use.currentTask();
   const handleCloseModal = useTasksStore.use.closeModal();
   const deleteTask = useTasksStore.use.deleteTask();
@@ -86,14 +86,14 @@ export const TaskForm = () => {
         type="text"
         name="taskName"
         value={currentTask.name}
-        onChange={e => handleInputChange('name', e.target.value.trim())}
+        onChange={e => handleInputChange('name', e.target.value)}
         placeholder="Назва"
       />
       <ErrorStyled>{formErrors?.name && formErrors.name}</ErrorStyled>
       <TextAreaStyled
         name="taskDiscription"
         value={currentTask.description}
-        onChange={e => handleInputChange('description', e.target.value.trim())}
+        onChange={e => handleInputChange('description', e.target.value)}
         placeholder="Опис"
         rows={6}
       />

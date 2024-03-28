@@ -15,7 +15,7 @@ export const SearchFilter = () => {
         name="search"
         placeholder="Фільтрація"
         value={filterQuery}
-        onChange={e => setFilterQuery(e.target.value.trim())}
+        onChange={e => setFilterQuery(e.target.value)}
       />
       <SearchIconStyled />
     </WrapperSearchStyled>
