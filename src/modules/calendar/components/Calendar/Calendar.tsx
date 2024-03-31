@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { useDebounce } from 'use-debounce';
-import { getMonth, getYear } from 'date-fns';
+import { format, getMonth, getYear } from 'date-fns';
 
 import useTasksStore from '@/store/zustandStore/useTaskStore';
 
@@ -22,16 +22,16 @@ export const Calendar: FC = () => {
 
   const fetchTasks = useTasksStore.use.fetchTasks();
   const fetchHolidays = useTasksStore.use.fetchHolidays();
-
   const setIsModalOpen = useTasksStore.use.setIsModalOpen();
   const handleCloseModal = useTasksStore.use.closeModal();
-
   const isModalOpen = useTasksStore.use.isModalOpen();
   const displayMode = useTasksStore.use.displayMode();
   const selectedDate = useTasksStore.use.selectedDate();
   const filterQuery = useTasksStore.use.filterQuery();
   const year = getYear(selectedDate);
-  const month = getMonth(selectedDate);
+  const month = getMonth(selectedDate) + 1;
+  const selectedDay = useTasksStore.use.selectedDate();
+  const day = format(selectedDay, 'd');
 
   const [debouncedFilterQuery] = useDebounce(filterQuery, 300);
 
@@ -40,12 +40,32 @@ export const Calendar: FC = () => {
   }, [year, month, fetchHolidays]);
 
   useEffect(() => {
-    fetchTasks({
-      filterQuery: debouncedFilterQuery,
-      month: month + 1,
-      year,
-    });
-  }, [year, month, shouldRefetchTasks, debouncedFilterQuery, fetchTasks]);
+    let params;
+    if (displayMode === DISPLAY_MODE_MONTH) {
+      params = {
+        filterQuery: debouncedFilterQuery,
+        month,
+        year,
+      };
+    } else {
+      const numericDay = parseInt(day, 10) - 1;
+      params = {
+        filterQuery: debouncedFilterQuery,
+        month,
+        year,
+        day: numericDay,
+      };
+    }
+    fetchTasks(params);
+  }, [
+    year,
+    month,
+    day,
+    displayMode,
+    debouncedFilterQuery,
+    fetchTasks,
+    shouldRefetchTasks,
+  ]);
 
   useEffect(() => {
     if (displayMode === DISPLAY_MODE_MONTH) {

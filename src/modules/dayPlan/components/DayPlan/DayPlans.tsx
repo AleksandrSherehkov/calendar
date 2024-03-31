@@ -1,5 +1,3 @@
-import { format } from 'date-fns';
-
 import useTasksStore from '@/store/zustandStore/useTaskStore';
 
 import { TaskForm } from '../../../taskForm/components/TaskForm/TaskForm';
@@ -23,17 +21,12 @@ import {
 export const DayPlans = () => {
   const updateTasksOrder = useTasksStore.use.updateTasksOrder();
   const tasks = useTasksStore.use.tasks();
+  console.log(`tasks:`, tasks);
 
   const selectedDay = useTasksStore.use.selectedDate();
   const handleAddNewTaskDoubleClick = useTasksStore.use.addNewTaskDoubleClick();
 
   const isOpen = useTasksStore.use.isModalOpen();
-
-  const tasksForSelectedDay = tasks.filter(
-    task =>
-      format(new Date(task.date), 'yyyy-MM-dd') ===
-      format(selectedDay, 'yyyy-MM-dd')
-  );
 
   const onDragEnd = (result: DropResult) => {
     console.log(`result:`, result);
@@ -50,7 +43,7 @@ export const DayPlans = () => {
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {tasksForSelectedDay.map((task, index) => (
+              {tasks.map((task, index) => (
                 <Draggable
                   key={task._id}
                   draggableId={task._id ?? 'fallback-id-' + index}

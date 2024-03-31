@@ -17,6 +17,7 @@ export interface GetAllQueryParams {
   filterQuery?: string;
   month?: number;
   year?: number;
+  day?: number;
 }
 
 export interface PublicHoliday {
