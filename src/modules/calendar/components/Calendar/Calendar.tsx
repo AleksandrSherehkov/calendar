@@ -32,6 +32,7 @@ export const Calendar: FC = () => {
   const month = getMonth(selectedDate) + 1;
   const selectedDay = useTasksStore.use.selectedDate();
   const day = format(selectedDay, 'd');
+  console.log(`day:`, day);
 
   const [debouncedFilterQuery] = useDebounce(filterQuery, 300);
 
@@ -48,7 +49,7 @@ export const Calendar: FC = () => {
         year,
       };
     } else {
-      const numericDay = parseInt(day, 10) - 1;
+      const numericDay = parseInt(day, 10);
       params = {
         filterQuery: debouncedFilterQuery,
         month,

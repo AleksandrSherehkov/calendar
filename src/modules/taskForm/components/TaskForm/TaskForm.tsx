@@ -21,6 +21,7 @@ export const TaskForm = () => {
   const isLoading = useTasksStore.use.isLoading();
 
   const currentTask = useTasksStore.use.currentTask();
+  console.log(`currentTask:`, currentTask);
   const handleCloseModal = useTasksStore.use.closeModal();
   const deleteTask = useTasksStore.use.deleteTask();
   const isEditing = useTasksStore.use.isEditing();

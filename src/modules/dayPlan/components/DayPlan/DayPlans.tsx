@@ -24,6 +24,7 @@ export const DayPlans = () => {
   console.log(`tasks:`, tasks);
 
   const selectedDay = useTasksStore.use.selectedDate();
+  console.log(`selectedDay:`, selectedDay);
   const handleAddNewTaskDoubleClick = useTasksStore.use.addNewTaskDoubleClick();
 
   const isOpen = useTasksStore.use.isModalOpen();

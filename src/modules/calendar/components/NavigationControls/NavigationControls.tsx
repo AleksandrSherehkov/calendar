@@ -19,6 +19,7 @@ export const NavigationControls = () => {
   const nextYear = useTasksStore.use.nextYear();
   const displayMode = useTasksStore.use.displayMode();
   const selectedDate = useTasksStore.use.selectedDate();
+
   const resetToToday = useTasksStore.use.resetToToday();
 
   return (

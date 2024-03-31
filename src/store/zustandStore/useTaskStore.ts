@@ -12,6 +12,7 @@ const initialTaskState: Task = {
   description: '',
   date: new Date().toISOString(),
 };
+console.log(`initialTaskState:`, initialTaskState);
 
 const initialState: TasksState = {
   isLoading: false,
@@ -79,8 +80,12 @@ const useTasksStore = create<TasksState & TasksActions>()(
       },
 
       addNewTaskDoubleClick: (date: Date) => {
+        const offset = date.getTimezoneOffset() * 60000;
+        const localISOTime = new Date(date.getTime() - offset)
+          .toISOString()
+          .slice(0, -1);
         set({
-          currentTask: { ...initialTaskState, date: date.toISOString() },
+          currentTask: { ...initialTaskState, date: localISOTime },
           isEditing: true,
           isModalOpen: true,
         });
