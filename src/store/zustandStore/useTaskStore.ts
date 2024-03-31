@@ -12,7 +12,6 @@ const initialTaskState: Task = {
   description: '',
   date: new Date().toISOString(),
 };
-console.log(`initialTaskState:`, initialTaskState);
 
 const initialState: TasksState = {
   isLoading: false,

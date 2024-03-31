@@ -21,10 +21,9 @@ import {
 export const DayPlans = () => {
   const updateTasksOrder = useTasksStore.use.updateTasksOrder();
   const tasks = useTasksStore.use.tasks();
-  console.log(`tasks:`, tasks);
 
   const selectedDay = useTasksStore.use.selectedDate();
-  console.log(`selectedDay:`, selectedDay);
+
   const handleAddNewTaskDoubleClick = useTasksStore.use.addNewTaskDoubleClick();
 
   const isOpen = useTasksStore.use.isModalOpen();
