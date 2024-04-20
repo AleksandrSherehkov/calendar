@@ -8,7 +8,7 @@ import {
 
 const instance = axios.create({
   // baseURL: 'http://localhost:3000/api/tasks',
-  baseURL: 'https://calendar-backend-dtsk.onrender.com/api/tasks',
+  baseURL: 'https://calendar-backend-is8j.onrender.com/api/tasks',
 });
 
 export const getAllTasks = async (
